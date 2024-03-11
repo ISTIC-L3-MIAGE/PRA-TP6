@@ -1,4 +1,4 @@
-package bah.tahi.morpion;
+package bah.tahi.crossword;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +8,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
-public class MorpionController {
+public class CrosswordController {
 
     /**
      * Instance du modèle de jeu

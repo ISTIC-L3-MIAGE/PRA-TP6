@@ -1,4 +1,4 @@
-package bah.tahi.morpion;
+package bah.tahi.crossword;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.NumberExpression;

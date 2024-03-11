@@ -1,4 +1,4 @@
-package bah.tahi.morpion;
+package bah.tahi.crossword;
 
 public enum Owner {
 	NONE, FIRST, SECOND;
