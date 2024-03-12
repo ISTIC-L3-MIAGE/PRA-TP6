@@ -3,6 +3,7 @@ package bah.tahi.crossword;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -24,34 +25,11 @@ public class CrosswordController {
     private AnchorPane gridContainer;
 
     /**
-     * Bouton RESTART
+     * Les indices
      */
     @FXML
-    private Button restartButton;
-
-    /**
-     * Message de fin de partie
-     */
-    @FXML
-    private Label gameOverLabel;
-
-    /**
-     * Nombre de cases libres
-     */
-    @FXML
-    private Label freeCasesLabel;
-
-    /**
-     * Score du premier joueur
-     */
-    @FXML
-    private Label firstCasesLabel;
-
-    /**
-     * Score du second joueur
-     */
-    @FXML
-    private Label secondCasesLabel;
+    private ScrollPane horizontalIndexes;
+    private ScrollPane verticalIndexes;
 
     @FXML
     public void initialize() {
@@ -74,6 +52,8 @@ public class CrosswordController {
             grid.getColumnConstraints().add(new ColumnConstraints(gridRowWidth));
         }
 
+        // Tout est OK pour crossword jusqu'ici
+
         // Ajout des cases à la grille
         for (i = 0; i < model.getBoardHeight(); i++) {
             for (j = 0; j < model.getBoardWidth(); j++) {
@@ -86,7 +66,9 @@ public class CrosswordController {
         gridContainer.getChildren().add(grid);
 
         // Évènement du bouton RESTART
+        /*
         restartButton.setOnAction(event -> model.restart());
+
 
         // Binding des labels
         gameOverLabel.textProperty().bind(model.getEndOfGameMessage());
@@ -99,5 +81,7 @@ public class CrosswordController {
 
         secondCasesLabel.styleProperty().bind(model.getOwnerLabelStyle(Owner.SECOND));
         secondCasesLabel.textProperty().bind(model.getScore(Owner.SECOND).asString().concat(" case(s) pour O"));
+    */
     }
+
 }
