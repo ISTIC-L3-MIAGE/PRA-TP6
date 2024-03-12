@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TestGrid" type="JUnit" factoryName="JUnit">
+    <module name="PRA-TP6" />
+    <option name="PACKAGE_NAME" value="bah.tahi.crossword.test" />
+    <option name="MAIN_CLASS_NAME" value="bah.tahi.crossword.test.TestGrid" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
