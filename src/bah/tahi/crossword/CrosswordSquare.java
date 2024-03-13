@@ -168,10 +168,10 @@ public class CrosswordSquare extends Label {
 					break;
 				}
 
-				// Vérifier si la case opposée est valide
-				if (crossword.correctCoords(nextRow, nextColumn)) {
-					// Déplacer le focus vers la case opposée
-					crossword.getCell(nextRow, nextColumn).requestFocus();
+				// Vérifier si la prochaine case est valide
+				if (crossword.correctCoords(nextRow, nextColumn) && !crossword.isBlackSquare(nextRow, nextColumn)) {
+					CrosswordSquare nextSquare = crossword.getCell(nextRow, nextColumn);
+					nextSquare.requestFocus();
 				}
 			}
 		});

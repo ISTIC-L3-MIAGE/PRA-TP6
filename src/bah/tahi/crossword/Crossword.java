@@ -36,7 +36,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 
 	public boolean isBlackSquare(int row, int column) {
 		if (correctCoords(row, column)) {
-			return getCell(row, column) == null;
+			return getCell(row, column).blackProperty().get();
 		} else {
 			throw new RuntimeException();
 		}

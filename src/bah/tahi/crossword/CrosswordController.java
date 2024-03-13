@@ -1,7 +1,7 @@
 package bah.tahi.crossword;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -26,9 +26,9 @@ public class CrosswordController {
 	 * Les indices
 	 */
 	@FXML
-	private ScrollPane horizontalIndexes;
+	private ListView horizontalIndexes;
 	@FXML
-	private ScrollPane verticalIndexes;
+	private ListView verticalIndexes;
 
 	@FXML
 	public void initialize() {
@@ -54,6 +54,8 @@ public class CrosswordController {
 		}
 
 		model.setBlackSquare(5, 5, true); // test
+		model.setBlackSquare(6, 7, true); // test
+		model.setBlackSquare(6, 8, true); // test
 
 		// Ajout des cases à la grille
 		for (i = 0; i < BOARD_HEIGHT; i++) {
