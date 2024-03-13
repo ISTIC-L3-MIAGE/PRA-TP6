@@ -3,9 +3,11 @@ package bah.tahi.crossword;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -65,13 +67,14 @@ public class CrosswordSquare extends Label {
 
 		// Bindings
 		// ownerProperty().bind(model.getSquare(row, column));
+
+		// Les observateurs
 		focusedProperty().addListener((observable, oldValue, newValue) -> {
 			setBorder(newValue ? focusedBorder : border);
 		});
 
-		// Les observateurs
 		propositionProperty().addListener((observable, oldValue, newValue) -> {
-
+			setText(newValue);
 		});
 
 		blackProperty().addListener((observable, oldValue, newValue) -> {
@@ -100,8 +103,23 @@ public class CrosswordSquare extends Label {
 		});
 
 		setOnMouseClicked(event -> {
-			requestFocus(); // Donne le focus à la case cliquée
-			setText("A");
+			if (!blackProperty().get()) {
+				requestFocus(); // Donne le focus à la case cliquée
+			}
+		});
+
+		// Détection des touches du clavier
+		setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (isFocused()) {
+					String keyPressed = event.getText().toUpperCase(); // Récupère la lettre pressée (en majuscules)
+					if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) { // Vérifie si c'est une
+																								// lettre
+						propositionProperty().set(keyPressed); // Met à jour le texte de la case avec la lettre
+					}
+				}
+			}
 		});
 	}
 }
