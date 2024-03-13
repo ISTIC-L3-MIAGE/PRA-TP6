@@ -1,13 +1,13 @@
 package bah.tahi.crossword;
 
+import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class CrosswordSquare extends Label {
 
@@ -56,9 +57,13 @@ public class CrosswordSquare extends Label {
 																									// défaut
 																									// des
 																									// cases
-		// setText("A");
-		// setEditable(false); // Les cases ne sont pas modifiables au clavier
-		// setFocusTraversable(false); // Inutile de changer le focus des cases
+		// Animations
+		ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), this);
+		scaleTransition.setFromX(0); // Échelle de départ (rétrécie)
+		scaleTransition.setFromY(0);
+		scaleTransition.setToX(1.0); // Échelle d'arrivée (taile normale)
+		scaleTransition.setToY(1.0);
+
 		setFont(normalFont); // On applique la police normale à l'initialisation
 		setBorder(border); // On applique les bordures à l'initialisation
 		setAlignment(Pos.CENTER); // Centrer le texte dans une case
@@ -66,24 +71,31 @@ public class CrosswordSquare extends Label {
 		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Taille pour que la case occupe tout l'espace disponible dans
 
 		// Bindings
-		// ownerProperty().bind(model.getSquare(row, column));
+		textProperty().bind(propositionProperty());
 
 		// Les observateurs
 		focusedProperty().addListener((observable, oldValue, newValue) -> {
 			setBorder(newValue ? focusedBorder : border);
 		});
 
-		propositionProperty().addListener((observable, oldValue, newValue) -> {
-			setText(newValue);
-		});
-
 		blackProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
-				setText(null);
+				propositionProperty().set(null);
 				setBackground(blackBg);
 			} else {
-				setText("");
+				propositionProperty().set(null);
 				setBackground(whiteBg);
+			}
+		});
+
+		textProperty().addListener((observable, oldValue, newValue) -> {
+			// Si la nouvelle valeur n'est pas vide (une lettre a été tapée)
+			if (newValue != null && !newValue.isEmpty() && Character.isLetter(newValue.charAt(0))) {
+				// Arrêter et remettre à zéro la transition
+				scaleTransition.stop();
+				scaleTransition.setRate(1.0);
+				// Jouer la transition
+				scaleTransition.playFromStart();
 			}
 		});
 
@@ -109,16 +121,45 @@ public class CrosswordSquare extends Label {
 		});
 
 		// Détection des touches du clavier
-		setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (isFocused()) {
-					String keyPressed = event.getText().toUpperCase(); // Récupère la lettre pressée (en majuscules)
-					if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) { // Vérifie si c'est une
-																								// lettre
-						propositionProperty().set(keyPressed); // Met à jour le texte de la case avec la lettre
-					}
+		setOnKeyPressed(event -> {
+			// Changement de la valeur du champ
+			if (isFocused()) {
+				String keyPressed = event.getText().toUpperCase();
+
+				if (event.getCode() == KeyCode.BACK_SPACE) {
+					propositionProperty().set("");
+				} else if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) {
+					propositionProperty().set(keyPressed);
 				}
+			}
+
+			// Changement de focus
+			// Déterminer la direction opposée
+			int oppositeRow = row;
+			int oppositeColumn = column;
+
+			System.out.println(event.getCode());
+
+			switch (event.getCode()) {
+			case UP:
+				oppositeRow--;
+				break;
+			case DOWN:
+				oppositeRow++;
+				break;
+			case LEFT:
+				oppositeColumn--;
+				break;
+			case RIGHT:
+				oppositeColumn++;
+				break;
+			// Ajoute d'autres cas pour les autres directions si nécessaire
+			}
+
+			// Vérifier si la case opposée est valide
+			if (crossword.correctCoords(oppositeRow, oppositeColumn)) {
+				// Déplacer le focus vers la case opposée
+				crossword.getCell(oppositeRow, oppositeColumn).requestFocus();
 			}
 		});
 	}
