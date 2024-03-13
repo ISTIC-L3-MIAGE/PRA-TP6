@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -122,44 +121,58 @@ public class CrosswordSquare extends Label {
 
 		// Détection des touches du clavier
 		setOnKeyPressed(event -> {
-			// Changement de la valeur du champ
 			if (isFocused()) {
-				String keyPressed = event.getText().toUpperCase();
+				int nextRow = row, nextColumn = column;
 
-				if (event.getCode() == KeyCode.BACK_SPACE) {
+				switch (event.getCode()) {
+
+				case UP:
+					crossword.directionProperty().set(Direction.VERTICAL);
+					nextRow--;
+					break;
+
+				case DOWN:
+					crossword.directionProperty().set(Direction.VERTICAL);
+					nextRow++;
+					break;
+
+				case LEFT:
+					crossword.directionProperty().set(Direction.HORIZONTAL);
+					nextColumn--;
+					break;
+
+				case RIGHT:
+					crossword.directionProperty().set(Direction.HORIZONTAL);
+					nextColumn++;
+					break;
+
+				case BACK_SPACE:
 					propositionProperty().set("");
-				} else if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) {
-					propositionProperty().set(keyPressed);
+					if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
+						nextColumn--;
+					} else {
+						nextRow--;
+					}
+					break;
+
+				default:
+					String keyPressed = event.getText().toUpperCase();
+					if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) {
+						propositionProperty().set(keyPressed);
+						if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
+							nextColumn++;
+						} else {
+							nextRow++;
+						}
+					}
+					break;
 				}
-			}
 
-			// Changement de focus
-			// Déterminer la direction opposée
-			int oppositeRow = row;
-			int oppositeColumn = column;
-
-			System.out.println(event.getCode());
-
-			switch (event.getCode()) {
-			case UP:
-				oppositeRow--;
-				break;
-			case DOWN:
-				oppositeRow++;
-				break;
-			case LEFT:
-				oppositeColumn--;
-				break;
-			case RIGHT:
-				oppositeColumn++;
-				break;
-			// Ajoute d'autres cas pour les autres directions si nécessaire
-			}
-
-			// Vérifier si la case opposée est valide
-			if (crossword.correctCoords(oppositeRow, oppositeColumn)) {
-				// Déplacer le focus vers la case opposée
-				crossword.getCell(oppositeRow, oppositeColumn).requestFocus();
+				// Vérifier si la case opposée est valide
+				if (crossword.correctCoords(nextRow, nextColumn)) {
+					// Déplacer le focus vers la case opposée
+					crossword.getCell(nextRow, nextColumn).requestFocus();
+				}
 			}
 		});
 	}
