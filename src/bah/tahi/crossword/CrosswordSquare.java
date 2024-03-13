@@ -1,6 +1,9 @@
 package bah.tahi.crossword;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -13,24 +16,20 @@ import javafx.scene.text.Font;
 
 public class CrosswordSquare extends Label {
 
-	/**
-	 * Instance du modèle de jeu
-	 */
-	private static final Crossword model = Crossword.getInstance();
+	private final String solution = "";
+	private final String proposition = "";
+	private final String horizontal = "";
+	private final String vertical = "";
+	private final BooleanProperty black = new SimpleBooleanProperty(false);
 
-	private String solution;
-	private String proposition;
-	private String horizontal;
-	private String vertical;
-	private final boolean isBlack;
+	public final BooleanProperty blackProperty() {
+		return black;
+	}
 
-	public CrosswordSquare(final int row, final int column) {
-		// Initialisation
-		isBlack = model.isBlackSquare(row, column);
-
+	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
 		// Styles
-		Font normalFont = new Font((double) 100 / model.getHeight()); // Police normale
-		Font bigFont = new Font((double) 150 / model.getHeight()); // Police en cas de victoire
+		Font normalFont = new Font((double) 100 / crossword.getHeight()); // Police normale
+		Font bigFont = new Font((double) 150 / crossword.getHeight()); // Police en cas de victoire
 		Background whiteBg = new Background(new BackgroundFill(Color.WHITE, null, null)); // Le fond des cases vides en
 																							// cours de partie
 		Background blackBg = new Background(new BackgroundFill(Color.BLACK, null, null)); // Le fond des cases vides en
@@ -38,6 +37,9 @@ public class CrosswordSquare extends Label {
 		Background greenBg = new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)); // Le fond des cases
 																								// vides en cours de
 																								// partie
+		Background greyBg = new Background(new BackgroundFill(Color.LIGHTGREY, null, null)); // Le fond des cases
+		// vides en cours de
+		// partie
 		Background redBg = new Background(new BackgroundFill(Color.RED, null, null)); // Le fond des cases vides à la
 																						// fin d'une partie
 		Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(0.5))); // Bordure
@@ -45,7 +47,7 @@ public class CrosswordSquare extends Label {
 																															// défaut
 																															// des
 																															// cases
-		setText("A");
+		// setText("A");
 		// setEditable(false); // Les cases ne sont pas modifiables au clavier
 		setFocusTraversable(false); // Inutile de changer le focus des cases
 		setFont(normalFont); // On applique la police normale à l'initialisation
@@ -56,12 +58,36 @@ public class CrosswordSquare extends Label {
 
 		// Bindings
 		// ownerProperty().bind(model.getSquare(row, column));
-		if (isBlack) {
-			setText("");
-			setBackground(blackBg);
-		} else {
-			setBackground(whiteBg);
-		}
+
+		// Les observateurs
+		blackProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				setText(null);
+				setBackground(blackBg);
+			} else {
+				setText("");
+				setBackground(whiteBg);
+			}
+		});
+
+		// Les évènements liés à la souris
+		setOnMouseEntered(event -> {
+			if (!blackProperty().get()) {
+				setBackground(greyBg);
+				setCursor(Cursor.HAND); // On change le curseur au survol de la souris d'une case qui n'est pas noire.
+			}
+		});
+
+		setOnMouseExited(event -> {
+			if (!blackProperty().get()) {
+				setBackground(whiteBg);
+				setCursor(Cursor.DEFAULT); // On remet le curseur par défaut de la souris.
+			}
+		});
+
+		setOnMouseClicked(event -> {
+
+		});
 
 	}
 }

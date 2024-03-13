@@ -12,7 +12,7 @@ public class CrosswordController {
 	/**
 	 * Instance du modèle de jeu
 	 */
-	private final Crossword model = Crossword.getInstance();
+	private static final Crossword model = Crossword.getInstance();
 	private final int BOARD_HEIGHT = model.getHeight();
 	private final int BOARD_WIDTH = model.getWidth();
 
@@ -53,7 +53,7 @@ public class CrosswordController {
 			grid.getColumnConstraints().add(new ColumnConstraints(gridRowWidth));
 		}
 
-		// model.setBlackSquare(5, 5, true); // test
+		model.setBlackSquare(5, 5, true); // test
 
 		// Ajout des cases à la grille
 		for (i = 0; i < BOARD_HEIGHT; i++) {

@@ -11,15 +11,16 @@ public class Crossword extends Grid<CrosswordSquare> {
 	private Crossword(int height, int width) {
 		super(height, width);
 
-		for (int i = 0; i < getHeight(); i++) {
-			for (int j = 0; j < getWidth(); j++) {
-				setCell(i, j, new CrosswordSquare(i, j));
+		for (int row = 0; row < getHeight(); row++) {
+			for (int column = 0; column < getWidth(); column++) {
+				CrosswordSquare square = new CrosswordSquare(this, row, column);
+				setCell(row, column, square);
 			}
 		}
 	}
 
 	public static Crossword createPuzzle(Database database, int puzzleNumber) {
-		return null;
+		return new Crossword(9, 9);
 	}
 
 	public StringProperty propositionProperty(int row, int column) {
@@ -36,11 +37,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 
 	public void setBlackSquare(int row, int column, boolean black) {
 		if (correctCoords(row, column)) {
-			if (black) {
-				setCell(row, column, null);
-			} else {
-				setCell(row, column, new CrosswordSquare(row, column));
-			}
+			getCell(row, column).blackProperty().set(black);
 		} else {
 			throw new RuntimeException();
 		}
@@ -92,7 +89,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * Classe interne selon le pattern singleton.
 	 */
 	private static class CrosswordHolder {
-		private static final Crossword INSTANCE = new Crossword(9, 9);
+		private static final Crossword INSTANCE = Crossword.createPuzzle(null, 0);
 	}
 
 }
