@@ -1,5 +1,8 @@
 package bah.tahi.crossword;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
@@ -7,6 +10,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 
 	private ObservableList<Clue> verticalClues;
 	private ObservableList<Clue> horizontalClues;
+	private ObjectProperty currentSquare = new SimpleObjectProperty(null);
 
 	private Crossword(int height, int width) {
 		super(height, width);
@@ -25,6 +29,15 @@ public class Crossword extends Grid<CrosswordSquare> {
 
 	public StringProperty propositionProperty(int row, int column) {
 		return null;
+	}
+
+	public final ObjectProperty currentSquareProperty() {
+		return currentSquare;
+	}
+
+	public final BooleanBinding isCurrentSquare(int row, int column) {
+		CrosswordSquare square = getCell(row, column);
+		return currentSquareProperty().isEqualTo(square);
 	}
 
 	public boolean isBlackSquare(int row, int column) {

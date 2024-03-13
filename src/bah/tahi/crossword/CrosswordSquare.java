@@ -2,6 +2,7 @@ package bah.tahi.crossword;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -17,10 +18,14 @@ import javafx.scene.text.Font;
 public class CrosswordSquare extends Label {
 
 	private final String solution = "";
-	private final String proposition = "";
+	private final SimpleStringProperty proposition = new SimpleStringProperty("");
 	private final String horizontal = "";
 	private final String vertical = "";
 	private final BooleanProperty black = new SimpleBooleanProperty(false);
+
+	public final SimpleStringProperty propositionProperty() {
+		return proposition;
+	}
 
 	public final BooleanProperty blackProperty() {
 		return black;
@@ -43,13 +48,15 @@ public class CrosswordSquare extends Label {
 		Background redBg = new Background(new BackgroundFill(Color.RED, null, null)); // Le fond des cases vides à la
 																						// fin d'une partie
 		Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(0.5))); // Bordure
-																															// par
-																															// défaut
-																															// des
-																															// cases
+		Border focusedBorder = new Border(
+				new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))); // Bordure
+																									// par
+																									// défaut
+																									// des
+																									// cases
 		// setText("A");
 		// setEditable(false); // Les cases ne sont pas modifiables au clavier
-		setFocusTraversable(false); // Inutile de changer le focus des cases
+		// setFocusTraversable(false); // Inutile de changer le focus des cases
 		setFont(normalFont); // On applique la police normale à l'initialisation
 		setBorder(border); // On applique les bordures à l'initialisation
 		setAlignment(Pos.CENTER); // Centrer le texte dans une case
@@ -58,8 +65,15 @@ public class CrosswordSquare extends Label {
 
 		// Bindings
 		// ownerProperty().bind(model.getSquare(row, column));
+		focusedProperty().addListener((observable, oldValue, newValue) -> {
+			setBorder(newValue ? focusedBorder : border);
+		});
 
 		// Les observateurs
+		propositionProperty().addListener((observable, oldValue, newValue) -> {
+
+		});
+
 		blackProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
 				setText(null);
@@ -86,8 +100,8 @@ public class CrosswordSquare extends Label {
 		});
 
 		setOnMouseClicked(event -> {
-
+			requestFocus(); // Donne le focus à la case cliquée
+			setText("A");
 		});
-
 	}
 }
