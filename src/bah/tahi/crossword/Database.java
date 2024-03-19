@@ -17,7 +17,7 @@ public class Database {
 	}
 
 	private Connection connectToDB() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:mysql:");
+		Connection conn = DriverManager.getConnection("jdbc:mysql:pra-tp6");
 		return conn;
 	}
 
