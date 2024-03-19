@@ -24,6 +24,7 @@ public class CrosswordSquare extends Label {
 	private final String horizontal = "";
 	private final String vertical = "";
 	private final BooleanProperty black = new SimpleBooleanProperty(false);
+	// TODO: Voir si on peut rajouter clue ici
 
 	public final SimpleStringProperty propositionProperty() {
 		return proposition;

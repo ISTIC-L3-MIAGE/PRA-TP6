@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
+// Le plateau de jeu est toujours symétrique
 public class Crossword extends Grid<CrosswordSquare> {
 
 	private ObservableList<Clue> verticalClues;
@@ -23,7 +24,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	public static Crossword createPuzzle(Database database, int puzzleNumber) {
-		return new Crossword(9, 9);
+		return new Crossword(puzzleNumber, puzzleNumber);
 	}
 
 	public StringProperty propositionProperty(int row, int column) {
@@ -96,7 +97,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * Classe interne selon le pattern singleton.
 	 */
 	private static class CrosswordHolder {
-		private static final Crossword INSTANCE = Crossword.createPuzzle(null, 0);
+		private static final Crossword INSTANCE = Crossword.createPuzzle(null, 9);
 	}
 
 }
