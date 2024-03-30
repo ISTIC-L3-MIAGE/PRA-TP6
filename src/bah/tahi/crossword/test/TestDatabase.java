@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import bah.tahi.crossword.Crossword;
 import bah.tahi.crossword.Database;
 
 public class TestDatabase {
@@ -20,12 +21,21 @@ public class TestDatabase {
 	}
 
 	@Test
-	public void testDataFetching() {
-		testConnection();
-
+	public void testAvailableGrids() {
 		Map<Integer, String> grids = db.availableGrids();
 		String expectedGridName = "Français débutants (7x6)";
 		String actualGridName = grids.get(10);
+
+		assertEquals(expectedGridName, actualGridName);
+	}
+
+	@Test
+	public void testCrosswordExtraction() {
+		Map<Integer, String> grids = db.availableGrids();
+		String expectedGridName = "Français débutants (7x6)";
+		String actualGridName = grids.get(10);
+
+		Crossword crossword = db.extractGrid(10);
 
 		assertEquals(expectedGridName, actualGridName);
 	}

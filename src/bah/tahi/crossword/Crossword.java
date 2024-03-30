@@ -24,7 +24,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	public static Crossword createPuzzle(Database database, int puzzleNumber) {
-		return new Crossword(puzzleNumber, puzzleNumber);
+		return database.extractGrid(puzzleNumber);
 	}
 
 	public StringProperty propositionProperty(int row, int column) {
@@ -70,14 +70,21 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	public void setDefinition(int row, int column, boolean horizontal, String definition) {
+		Clue clue = new Clue(definition, row, column, horizontal);
+
+		if (horizontal) {
+			horizontalClues.add(clue);
+		} else {
+			verticalClues.add(clue);
+		}
 	}
 
 	public ObservableList<Clue> getVerticalClues() {
-		return null;
+		return verticalClues;
 	}
 
 	public ObservableList<Clue> getHorizontalClues() {
-		return null;
+		return horizontalClues;
 	}
 
 	public void printProposition() {
