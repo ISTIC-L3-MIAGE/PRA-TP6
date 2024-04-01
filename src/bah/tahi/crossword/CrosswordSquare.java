@@ -131,7 +131,7 @@ public class CrosswordSquare extends Label {
 		setFont(normalFont); // On applique la police normale à l'initialisation
 		setBorder(border); // On applique les bordures à l'initialisation
 		setAlignment(Pos.CENTER); // Centrer le texte dans une case
-		setBackground(whiteBg); // Couleur par défaut d'une case
+		setBackground(blackBg); // Couleur par défaut d'une case
 		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Taille pour que la case occupe tout l'espace disponible dans
 
 		// Bindings

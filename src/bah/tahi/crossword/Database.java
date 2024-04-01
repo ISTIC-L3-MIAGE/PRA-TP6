@@ -100,7 +100,8 @@ public class Database {
 		}
 
 		try {
-			String sql = "SELECT * FROM Crossword JOIN Grid WHERE Crossword.numero_grille = " + puzzleNumber;
+			String sql = "SELECT * FROM Crossword, Grid WHERE Crossword.numero_grille = Grid.numero_grille AND Crossword.numero_grille = "
+					+ puzzleNumber;
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -108,35 +109,31 @@ public class Database {
 				return null;
 			}
 
-			Crossword crossword = new Crossword(rs.getInt("hauteur"), rs.getInt("largeur"));
+			int hauteur = rs.getInt("hauteur");
+			int largeur = rs.getInt("largeur");
+
+			System.out.println(hauteur + "x" + largeur);
+
+			Crossword crossword = new Crossword(hauteur, largeur);
 
 			do {
 				String definition = rs.getString("definition");
 				boolean horizontal = rs.getBoolean("horizontal");
 				int ligne = rs.getInt("ligne") - 1;
 				int colonne = rs.getInt("colonne") - 1;
-				String solution = rs.getString("solution");
+				String solution = rs.getString("solution").toUpperCase();
 
-				crossword.setDefinition(ligne + 1, colonne + 1, horizontal, definition);
+				crossword.setDefinition(ligne, colonne, horizontal, definition);
 
 				for (int i = 0; i < solution.length(); i++) {
 					if (horizontal) {
-						System.out.println(definition + " (" + ligne + "," + (colonne + i) + ") - "
-								+ (horizontal ? "horizontal" : "vertical")); // test
-
 						crossword.setBlackSquare(ligne, colonne + i, false);
 						crossword.setSolution(ligne, colonne + i, solution.charAt(i));
 					} else {
-						System.out.println(definition + " (" + (ligne + i) + "," + colonne + ") - "
-								+ (horizontal ? "horizontal" : "vertical")); // test
-
 						crossword.setBlackSquare(ligne + i, colonne, false);
 						crossword.setSolution(ligne + i, colonne, solution.charAt(i));
 					}
 				}
-
-				System.out.println(definition + " (" + ligne + "," + colonne + ") - "
-						+ (horizontal ? "horizontal" : "vertical") + " OK\n"); // test
 			} while (rs.next());
 
 			return crossword;

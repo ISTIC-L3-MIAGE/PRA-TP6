@@ -35,6 +35,7 @@ public class CrosswordController {
 		// Instanciation du modèle de jeu
 		Database db = new Database();
 		model = Crossword.createPuzzle(db, 10);
+		// model = new Crossword(7, 6);
 		BOARD_HEIGHT = model.getHeight();
 		BOARD_WIDTH = model.getWidth();
 

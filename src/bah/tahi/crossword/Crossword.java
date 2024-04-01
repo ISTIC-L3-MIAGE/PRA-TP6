@@ -144,11 +144,9 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * @param definition la definition à affecter.
 	 */
 	public void setDefinition(int row, int column, boolean horizontal, String definition) {
-		Clue clue = new Clue(definition, row, column, horizontal);
+		Clue clue = new Clue(definition, row + 1, column + 1, horizontal);
 		CrosswordSquare square = getCell(row, column);
 		square.setDefinition(clue, horizontal);
-
-		System.out.println(clue.toString()); // test
 
 		if (horizontal) {
 			horizontalClues.add(clue);
