@@ -112,8 +112,6 @@ public class Database {
 			int hauteur = rs.getInt("hauteur");
 			int largeur = rs.getInt("largeur");
 
-			System.out.println(hauteur + "x" + largeur);
-
 			Crossword crossword = new Crossword(hauteur, largeur);
 
 			do {

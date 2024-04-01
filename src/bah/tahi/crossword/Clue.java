@@ -28,6 +28,6 @@ public class Clue {
 
 	@Override
 	public String toString() {
-		return clue + " (" + row + "," + column + ") - " + (horizontal ? "horizontal" : "vertical");
+		return clue + " (" + (row + 1) + "," + (column + 1) + ")";
 	}
 }

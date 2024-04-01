@@ -35,13 +35,32 @@ public class CrosswordController {
 		// Instanciation du modèle de jeu
 		Database db = new Database();
 		model = Crossword.createPuzzle(db, 10);
-		// model = new Crossword(7, 6);
 		BOARD_HEIGHT = model.getHeight();
 		BOARD_WIDTH = model.getWidth();
 
 		// Initialistaion des indices
 		horizontalIndexes.setItems(model.getHorizontalClues());
 		verticalIndexes.setItems(model.getVerticalClues());
+
+		horizontalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue != null) {
+				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());
+				square.setAsCurrentSquare();
+				model.directionProperty().set(Direction.HORIZONTAL);
+			}
+		});
+
+		verticalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue != null) {
+				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());
+				square.setAsCurrentSquare();
+				model.directionProperty().set(Direction.VERTICAL);
+			}
+		});
+
+		model.directionProperty().addListener((observable, oldValue, newValue) -> {
+
+		});
 
 		// Initialisation de la grille et de son conteneur
 		int i, j;

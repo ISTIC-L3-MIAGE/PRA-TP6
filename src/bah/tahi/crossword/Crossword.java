@@ -77,11 +77,11 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * @param column numéro de colonne.
 	 */
 	public void setBlackSquare(int row, int column, boolean black) {
-		// if (correctCoords(row, column)) {
-		getCell(row, column).blackProperty().set(black);
-		// } else {
-		// throw new RuntimeException();
-		// }
+		if (correctCoords(row, column)) {
+			getCell(row, column).blackProperty().set(black);
+		} else {
+			throw new RuntimeException();
+		}
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * @param definition la definition à affecter.
 	 */
 	public void setDefinition(int row, int column, boolean horizontal, String definition) {
-		Clue clue = new Clue(definition, row + 1, column + 1, horizontal);
+		Clue clue = new Clue(definition, row, column, horizontal);
 		CrosswordSquare square = getCell(row, column);
 		square.setDefinition(clue, horizontal);
 
@@ -167,20 +167,6 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	public void printSolution() {
-	}
-
-	/**
-	 * @return la seule instance possible du jeu.
-	 */
-	public static Crossword getInstance() {
-		return CrosswordHolder.INSTANCE;
-	}
-
-	/**
-	 * Classe interne selon le pattern singleton.
-	 */
-	private static class CrosswordHolder {
-		private static final Crossword INSTANCE = new Crossword(9, 9);// Crossword.createPuzzle(null, 9);
 	}
 
 }

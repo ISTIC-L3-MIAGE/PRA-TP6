@@ -8,17 +8,12 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public class CrosswordSquare extends Label {
+
+	public static final String BLANK_CHAR = " ";
 
 	/**
 	 * Solution de la case.
@@ -28,7 +23,7 @@ public class CrosswordSquare extends Label {
 	/**
 	 * Proposition faite par le joueur.
 	 */
-	private final StringProperty proposition = new SimpleStringProperty("");
+	private final StringProperty proposition = new SimpleStringProperty(BLANK_CHAR);
 
 	/**
 	 * La définition du mot horizontal sur cette case.
@@ -66,7 +61,7 @@ public class CrosswordSquare extends Label {
 	 */
 	public final void setSolution(char solution) {
 		this.solution = solution;
-		propositionProperty().set(Character.toString(solution));
+		// propositionProperty().set(Character.toString(solution));
 	}
 
 	/**
@@ -98,29 +93,27 @@ public class CrosswordSquare extends Label {
 		return horizontal ? this.horizontal.getClue() : vertical.getClue();
 	}
 
+	public final void setAsCurrentSquare() {
+		if (!blackProperty().get()) {
+			requestFocus(); // Donne le focus à la case cliquée
+		}
+	}
+
+	public final void checkProposition() {
+		if (!blackProperty().get()) {
+			if (propositionProperty().get().charAt(0) == getSolution()) {
+				setBackground(UIDesign.greenBg);
+			} else {
+				setBackground(UIDesign.whiteBg);
+			}
+		}
+	}
+
 	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
 		// Styles
 		Font normalFont = new Font((double) 100 / crossword.getHeight()); // Police normale
 		Font bigFont = new Font((double) 150 / crossword.getHeight()); // Police en cas de victoire
-		Background whiteBg = new Background(new BackgroundFill(Color.WHITE, null, null)); // Le fond des cases vides en
-																							// cours de partie
-		Background blackBg = new Background(new BackgroundFill(Color.BLACK, null, null)); // Le fond des cases vides en
-																							// cours de partie
-		Background greenBg = new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)); // Le fond des cases
-																								// vides en cours de
-																								// partie
-		Background greyBg = new Background(new BackgroundFill(Color.LIGHTGREY, null, null)); // Le fond des cases
-		// vides en cours de
-		// partie
-		Background redBg = new Background(new BackgroundFill(Color.RED, null, null)); // Le fond des cases vides à la
-																						// fin d'une partie
-		Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(0.5))); // Bordure
-		Border focusedBorder = new Border(
-				new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, new BorderWidths(5))); // Bordure
-																									// par
-																									// défaut
-																									// des
-																									// cases
+
 		// Animations
 		ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), this);
 		scaleTransition.setFromX(0); // Échelle de départ (rétrécie)
@@ -129,9 +122,9 @@ public class CrosswordSquare extends Label {
 		scaleTransition.setToY(1.0);
 
 		setFont(normalFont); // On applique la police normale à l'initialisation
-		setBorder(border); // On applique les bordures à l'initialisation
+		setBorder(UIDesign.border); // On applique les bordures à l'initialisation
 		setAlignment(Pos.CENTER); // Centrer le texte dans une case
-		setBackground(blackBg); // Couleur par défaut d'une case
+		setBackground(UIDesign.blackBg); // Couleur par défaut d'une case
 		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Taille pour que la case occupe tout l'espace disponible dans
 
 		// Bindings
@@ -139,16 +132,16 @@ public class CrosswordSquare extends Label {
 
 		// Les observateurs
 		focusedProperty().addListener((observable, oldValue, newValue) -> {
-			setBorder(newValue ? focusedBorder : border);
+			setBorder(newValue ? UIDesign.focusedBorder : UIDesign.border);
 		});
 
 		blackProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
 				propositionProperty().set(null);
-				setBackground(blackBg);
+				setBackground(UIDesign.blackBg);
 			} else {
-				propositionProperty().set("");
-				setBackground(whiteBg);
+				propositionProperty().set(BLANK_CHAR);
+				setBackground(UIDesign.whiteBg);
 			}
 		});
 
@@ -166,23 +159,19 @@ public class CrosswordSquare extends Label {
 		// Les évènements liés à la souris
 		setOnMouseEntered(event -> {
 			if (!blackProperty().get()) {
-				setBackground(greyBg);
+				// setBackground(UIDesign.greyBg);
 				setCursor(Cursor.HAND); // On change le curseur au survol de la souris d'une case qui n'est pas noire.
 			}
 		});
 
 		setOnMouseExited(event -> {
 			if (!blackProperty().get()) {
-				setBackground(whiteBg);
+				// setBackground(UIDesign.whiteBg);
 				setCursor(Cursor.DEFAULT); // On remet le curseur par défaut de la souris.
 			}
 		});
 
-		setOnMouseClicked(event -> {
-			if (!blackProperty().get()) {
-				requestFocus(); // Donne le focus à la case cliquée
-			}
-		});
+		setOnMouseClicked(event -> setAsCurrentSquare());
 
 		// Détection des touches du clavier
 		setOnKeyPressed(event -> {
@@ -212,11 +201,20 @@ public class CrosswordSquare extends Label {
 					break;
 
 				case BACK_SPACE:
-					propositionProperty().set("");
+					propositionProperty().set(BLANK_CHAR);
 					if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
 						nextColumn--;
 					} else {
 						nextRow--;
+					}
+					break;
+
+				case ENTER:
+					for (int i = 0; i < crossword.getHeight(); i++) {
+						for (int j = 0; j < crossword.getWidth(); j++) {
+							CrosswordSquare square = crossword.getCell(i, j);
+							square.checkProposition();
+						}
 					}
 					break;
 
