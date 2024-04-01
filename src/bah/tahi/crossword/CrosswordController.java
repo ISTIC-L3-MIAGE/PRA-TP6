@@ -12,9 +12,9 @@ public class CrosswordController {
 	/**
 	 * Instance du modèle de jeu
 	 */
-	private static final Crossword model = Crossword.getInstance();
-	private final int BOARD_HEIGHT = model.getHeight();
-	private final int BOARD_WIDTH = model.getWidth();
+	private static Crossword model;
+	private int BOARD_HEIGHT;
+	private int BOARD_WIDTH;
 
 	/**
 	 * Conteneur du plateau de jeu sur la vue
@@ -26,12 +26,21 @@ public class CrosswordController {
 	 * Les indices
 	 */
 	@FXML
-	private ListView horizontalIndexes;
+	private ListView<Clue> horizontalIndexes;
 	@FXML
-	private ListView verticalIndexes;
+	private ListView<Clue> verticalIndexes;
 
 	@FXML
 	public void initialize() {
+		// Instanciation du modèle de jeu
+		Database db = new Database();
+		model = Crossword.createPuzzle(db, 10);
+		BOARD_HEIGHT = model.getHeight();
+		BOARD_WIDTH = model.getWidth();
+
+		// Initialistaion des indices
+		horizontalIndexes.setItems(model.getHorizontalClues());
+		verticalIndexes.setItems(model.getVerticalClues());
 
 		// Initialisation de la grille et de son conteneur
 		int i, j;
@@ -52,10 +61,6 @@ public class CrosswordController {
 		for (j = 0; j < BOARD_WIDTH; j++) {
 			grid.getColumnConstraints().add(new ColumnConstraints(gridRowWidth));
 		}
-
-		model.setBlackSquare(5, 5, true); // test
-		model.setBlackSquare(6, 7, true); // test
-		model.setBlackSquare(6, 8, true); // test
 
 		// Ajout des cases à la grille
 		for (i = 0; i < BOARD_HEIGHT; i++) {

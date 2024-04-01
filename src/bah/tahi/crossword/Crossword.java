@@ -3,16 +3,27 @@ package bah.tahi.crossword;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 // Le plateau de jeu est toujours symétrique
 public class Crossword extends Grid<CrosswordSquare> {
+	/**
+	 * Liste observant les indices verticaux.
+	 */
+	private ObservableList<Clue> verticalClues = FXCollections.observableArrayList();
 
-	private ObservableList<Clue> verticalClues;
-	private ObservableList<Clue> horizontalClues;
+	/**
+	 * Liste observant les indices horizontaux.
+	 */
+	private ObservableList<Clue> horizontalClues = FXCollections.observableArrayList();
+
+	/**
+	 * Direction courante.
+	 */
 	private ObjectProperty<Direction> direction = new SimpleObjectProperty<>(Direction.HORIZONTAL);
 
-	private Crossword(int height, int width) {
+	public Crossword(int height, int width) {
 		super(height, width);
 
 		for (int row = 0; row < getHeight(); row++) {
@@ -23,18 +34,34 @@ public class Crossword extends Grid<CrosswordSquare> {
 		}
 	}
 
-	public static Crossword createPuzzle(Database database, int puzzleNumber) {
-		return database.extractGrid(puzzleNumber);
-	}
-
-	public StringProperty propositionProperty(int row, int column) {
-		return null;
-	}
-
+	/**
+	 * @return l'observateur de la direction courante.
+	 */
 	public ObjectProperty<Direction> directionProperty() {
 		return direction;
 	}
 
+	/**
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 * @eturn l'observateur de la proposition sur la case (row,column).
+	 */
+	public StringProperty propositionProperty(int row, int column) {
+		return getCell(row, column).propositionProperty();
+	}
+
+	public static Crossword createPuzzle(Database database, int puzzleNumber) {
+		// return CrosswordHolder.INSTANCE; // test
+		return database.extractGrid(puzzleNumber);
+	}
+
+	/**
+	 * Permet de savoir si la case (row,column) est une case noire.
+	 * 
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 * @return true si la case (row,column) est une case noire, false sinon.
+	 */
 	public boolean isBlackSquare(int row, int column) {
 		if (correctCoords(row, column)) {
 			return getCell(row, column).blackProperty().get();
@@ -43,34 +70,85 @@ public class Crossword extends Grid<CrosswordSquare> {
 		}
 	}
 
+	/**
+	 * Permet de noircir une case.
+	 * 
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 */
 	public void setBlackSquare(int row, int column, boolean black) {
-		if (correctCoords(row, column)) {
-			getCell(row, column).blackProperty().set(black);
-		} else {
-			throw new RuntimeException();
-		}
+		// if (correctCoords(row, column)) {
+		getCell(row, column).blackProperty().set(black);
+		// } else {
+		// throw new RuntimeException();
+		// }
 	}
 
+	/**
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 * @return la lettre solution dans la case (row,column).
+	 */
 	public char getSolution(int row, int column) {
-		return 'a';
+		CrosswordSquare square = getCell(row, column);
+		return square.getSolution();
 	}
 
+	/**
+	 * Permet d'affecter une solution à la case (row,column).
+	 * 
+	 * @param row      numéro de ligne.
+	 * @param column   numéro de colonne.
+	 * @param solution la solution à affecter.
+	 */
 	public void setSolution(int row, int column, char solution) {
+		CrosswordSquare square = getCell(row, column);
+		square.setSolution(solution);
 	}
 
+	/**
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 * @return la proposition faite par le joueur dans la case (row,column).
+	 */
 	public char getProposition(int row, int column) {
-		return 'a';
+		return propositionProperty(row, column).get().charAt(0);
 	}
 
+	/**
+	 * Permet d'affecter la proposition du joueur à la case (row,column).
+	 * 
+	 * @param row         numéro de ligne.
+	 * @param column      numéro de colonne.
+	 * @param proposition la proposition à affecter.
+	 */
 	public void setProposition(int row, int column, char proposition) {
+		propositionProperty(row, column).set(Character.toString(proposition));
 	}
 
+	/**
+	 * @param row    numéro de ligne.
+	 * @param column numéro de colonne.
+	 * @return la définition du mot composé de la cse (row,column).
+	 */
 	public String getDefinition(int row, int column, boolean horizontal) {
-		return "";
+		CrosswordSquare square = getCell(row, column);
+		return square.getDefinition(horizontal);
 	}
 
+	/**
+	 * Permet d'affecter une définition à la case (row,column).
+	 * 
+	 * @param row        numéro de ligne.
+	 * @param column     numéro de colonne.
+	 * @param definition la definition à affecter.
+	 */
 	public void setDefinition(int row, int column, boolean horizontal, String definition) {
 		Clue clue = new Clue(definition, row, column, horizontal);
+		CrosswordSquare square = getCell(row, column);
+		square.setDefinition(clue, horizontal);
+
+		System.out.println(clue.toString()); // test
 
 		if (horizontal) {
 			horizontalClues.add(clue);
@@ -104,7 +182,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * Classe interne selon le pattern singleton.
 	 */
 	private static class CrosswordHolder {
-		private static final Crossword INSTANCE = Crossword.createPuzzle(null, 9);
+		private static final Crossword INSTANCE = new Crossword(9, 9);// Crossword.createPuzzle(null, 9);
 	}
 
 }

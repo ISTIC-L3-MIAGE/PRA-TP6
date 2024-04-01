@@ -4,6 +4,7 @@ import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -19,19 +20,82 @@ import javafx.util.Duration;
 
 public class CrosswordSquare extends Label {
 
-	private final String solution = "";
-	private final SimpleStringProperty proposition = new SimpleStringProperty("");
-	private final String horizontal = "";
-	private final String vertical = "";
-	private final BooleanProperty black = new SimpleBooleanProperty(false);
-	// TODO: Voir si on peut rajouter clue ici
+	/**
+	 * Solution de la case.
+	 */
+	private char solution;
 
-	public final SimpleStringProperty propositionProperty() {
+	/**
+	 * Proposition faite par le joueur.
+	 */
+	private final StringProperty proposition = new SimpleStringProperty("");
+
+	/**
+	 * La définition du mot horizontal sur cette case.
+	 */
+	private Clue horizontal;
+
+	/**
+	 * La définition du mot vertical sur cette case.
+	 */
+	private Clue vertical;
+
+	/**
+	 * Noircissement de la case.
+	 */
+	private final BooleanProperty black = new SimpleBooleanProperty(true);
+
+	/**
+	 * @return l'observateur de la proposition faite par le joueur.
+	 */
+	public final StringProperty propositionProperty() {
 		return proposition;
 	}
 
+	/**
+	 * @return l'observateur du noiricissement de la case.
+	 */
 	public final BooleanProperty blackProperty() {
 		return black;
+	}
+
+	/**
+	 * Permet d'affecter une solution à la case.
+	 * 
+	 * @param solution la solution à affecter.
+	 */
+	public final void setSolution(char solution) {
+		this.solution = solution;
+		propositionProperty().set(Character.toString(solution));
+	}
+
+	/**
+	 * @return la solution de la case.
+	 */
+	public final char getSolution() {
+		return solution;
+	}
+
+	/**
+	 * Permet d'affecter une définition à la case.
+	 * 
+	 * @param definition la definition à affecter.
+	 */
+	public final void setDefinition(Clue definition, boolean horizontal) {
+		if (horizontal) {
+			this.horizontal = definition;
+		} else {
+			this.vertical = definition;
+		}
+	}
+
+	/**
+	 * @param horizontal true pour avoir la définition du mot horizontal, false pour
+	 *                   la définition du mot vertical.
+	 * @return la définition de la case.
+	 */
+	public final String getDefinition(boolean horizontal) {
+		return horizontal ? this.horizontal.getClue() : vertical.getClue();
 	}
 
 	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
@@ -83,7 +147,7 @@ public class CrosswordSquare extends Label {
 				propositionProperty().set(null);
 				setBackground(blackBg);
 			} else {
-				propositionProperty().set(null);
+				propositionProperty().set("");
 				setBackground(whiteBg);
 			}
 		});

@@ -36,7 +36,7 @@ public class Database {
 	private Connection connectToDB() throws SQLException {
 		// Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://localhost/base_pra_tp6";
-		return DriverManager.getConnection(url, "root", "root");
+		return DriverManager.getConnection(url, "root", "");
 	}
 
 	/**
@@ -104,18 +104,42 @@ public class Database {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-			while (rs.next()) { // TODO: Continue here
-				String definition = rs.getString("definition");
-				int ligne = rs.getInt("ligne");
-				int colonne = rs.getInt("colonne");
-				boolean horizontal = rs.getBoolean("horizontal");
-
-				Clue clue = new Clue(definition, ligne, colonne, horizontal);
-
-				System.out.println(clue.toString()); // test
+			if (!rs.next()) {
+				return null;
 			}
 
-			return null;
+			Crossword crossword = new Crossword(rs.getInt("hauteur"), rs.getInt("largeur"));
+
+			do {
+				String definition = rs.getString("definition");
+				boolean horizontal = rs.getBoolean("horizontal");
+				int ligne = rs.getInt("ligne") - 1;
+				int colonne = rs.getInt("colonne") - 1;
+				String solution = rs.getString("solution");
+
+				crossword.setDefinition(ligne + 1, colonne + 1, horizontal, definition);
+
+				for (int i = 0; i < solution.length(); i++) {
+					if (horizontal) {
+						System.out.println(definition + " (" + ligne + "," + (colonne + i) + ") - "
+								+ (horizontal ? "horizontal" : "vertical")); // test
+
+						crossword.setBlackSquare(ligne, colonne + i, false);
+						crossword.setSolution(ligne, colonne + i, solution.charAt(i));
+					} else {
+						System.out.println(definition + " (" + (ligne + i) + "," + colonne + ") - "
+								+ (horizontal ? "horizontal" : "vertical")); // test
+
+						crossword.setBlackSquare(ligne + i, colonne, false);
+						crossword.setSolution(ligne + i, colonne, solution.charAt(i));
+					}
+				}
+
+				System.out.println(definition + " (" + ligne + "," + colonne + ") - "
+						+ (horizontal ? "horizontal" : "vertical") + " OK\n"); // test
+			} while (rs.next());
+
+			return crossword;
 		} catch (SQLException e) {
 			System.out.println("[ERROR] Error in Database.extractGrid()");
 			e.printStackTrace();
