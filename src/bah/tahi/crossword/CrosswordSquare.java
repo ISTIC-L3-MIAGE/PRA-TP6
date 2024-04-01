@@ -153,6 +153,10 @@ public class CrosswordSquare extends Label {
 				scaleTransition.setRate(1.0);
 				// Jouer la transition
 				scaleTransition.playFromStart();
+
+				if (!newValue.equals(oldValue)) {
+					setBackground(UIDesign.whiteBg);
+				}
 			}
 		});
 
