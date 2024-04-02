@@ -52,6 +52,8 @@ public class CrosswordController implements Initializable {
 		horizontalIndexes.setItems(model.getHorizontalClues());
 		verticalIndexes.setItems(model.getVerticalClues());
 
+		// horizontalIndexes.getSelectionModel().selectedItemProperty();
+
 		horizontalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue != null) {
 				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());

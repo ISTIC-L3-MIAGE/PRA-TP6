@@ -133,6 +133,9 @@ public class CrosswordSquare extends Label {
 		// Les observateurs
 		focusedProperty().addListener((observable, oldValue, newValue) -> {
 			setBorder(newValue ? UIDesign.focusedBorder : UIDesign.border);
+			if (horizontal != null) {
+				// crossword.getHorizontalClues()
+			}
 		});
 
 		blackProperty().addListener((observable, oldValue, newValue) -> {

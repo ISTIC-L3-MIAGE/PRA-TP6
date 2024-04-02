@@ -3,13 +3,14 @@ package bah.tahi.crossword;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MainCrossword extends Application {
 
 	private static Stage stage;
-	private static int puzzleNumber;
+	private static int puzzleNumber = 0;
 
 	public static Stage getStage() {
 		return stage;
@@ -26,11 +27,17 @@ public class MainCrossword extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			// TODO: Fix this
+			this.stage = stage;
 			Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
 			Scene scene = new Scene(root);
 
-			this.stage = stage;
+			scene.setOnKeyPressed(event -> {
+				if (event.isControlDown() && event.getCode() == KeyCode.W) {
+					// Fermer la fenêtre courante si Ctrl + W est enfoncé
+					stage.close();
+				}
+			});
+
 			stage.setTitle("Crossword puzzle");
 			stage.setScene(scene);
 			stage.sizeToScene();

@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class MainMenuController implements Initializable {
+
 	/**
 	 * Bouton pour commencer une partie.
 	 */
@@ -33,32 +34,36 @@ public class MainMenuController implements Initializable {
 		// Menu
 		Database db = new Database();
 		Map<Integer, String> grids = db.availableGrids();
+
 		gridChoices.setItems(FXCollections.observableArrayList(grids.values()));// .getItems().addAll(availableGrids);
 		gridChoices.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue != null) {
 				MainCrossword.setPuzzleNumber(gridChoices.getSelectionModel().getSelectedIndex() + 1);
+				playBtn.setDisable(false);
 			}
 		});
 
 		playBtn.setOnAction(event -> {
-			try {
+			if (MainCrossword.getPuzzleNumber() != 0) {
 				play();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		});
-
 	}
 
-	public void play() throws IOException {
-		HBox root = (HBox) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
-		Scene scene = new Scene(root);
+	public void play() {
+		try {
+			HBox root = (HBox) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
+			Scene scene = new Scene(root);
 
-		Stage stage = MainCrossword.getStage();
-		stage.setTitle("Crossword puzzle");
-		stage.setScene(scene);
-		stage.sizeToScene();
-		stage.setResizable(false);
-		stage.show();
+			Stage stage = MainCrossword.getStage();
+			stage.setTitle("Crossword puzzle");
+			stage.setScene(scene);
+			stage.sizeToScene();
+			stage.setResizable(false);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
