@@ -1,5 +1,6 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.models;
 
+import bah.tahi.crossword.utils.Database;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;

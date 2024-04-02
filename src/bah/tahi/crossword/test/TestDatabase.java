@@ -8,8 +8,8 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import bah.tahi.crossword.Crossword;
-import bah.tahi.crossword.Database;
+import bah.tahi.crossword.models.Crossword;
+import bah.tahi.crossword.utils.Database;
 
 public class TestDatabase {
 

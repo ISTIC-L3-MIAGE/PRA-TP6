@@ -8,12 +8,30 @@ import javafx.stage.Stage;
 
 public class MainCrossword extends Application {
 
+	private static Stage stage;
+	private static int puzzleNumber;
+
+	public static Stage getStage() {
+		return stage;
+	}
+
+	public static int getPuzzleNumber() {
+		return puzzleNumber;
+	}
+
+	public static void setPuzzleNumber(int number) {
+		puzzleNumber = number;
+	}
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			Pane root = (Pane) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
+			// TODO: Fix this
+			Pane root = (Pane) FXMLLoader
+					.load(getClass().getResource("/bah/tahi/crossword/controllers/mainMenuScene.fxml"));
 			Scene scene = new Scene(root);
 
+			this.stage = stage;
 			stage.setTitle("Crossword puzzle");
 			stage.setScene(scene);
 			stage.sizeToScene();

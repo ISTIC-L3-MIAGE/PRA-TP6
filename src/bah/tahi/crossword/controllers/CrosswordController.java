@@ -1,13 +1,23 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.controllers;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import bah.tahi.crossword.MainCrossword;
+import bah.tahi.crossword.models.Clue;
+import bah.tahi.crossword.models.Crossword;
+import bah.tahi.crossword.models.CrosswordSquare;
+import bah.tahi.crossword.models.Direction;
+import bah.tahi.crossword.utils.Database;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
-public class CrosswordController {
+public class CrosswordController implements Initializable {
 
 	/**
 	 * Instance du modèle de jeu
@@ -23,18 +33,24 @@ public class CrosswordController {
 	private AnchorPane gridContainer;
 
 	/**
-	 * Les indices
+	 * Liste des indices horizontaux.
 	 */
 	@FXML
 	private ListView<Clue> horizontalIndexes;
+
+	/**
+	 * Liste des indices verticaux.
+	 */
 	@FXML
 	private ListView<Clue> verticalIndexes;
 
 	@FXML
-	public void initialize() {
-		// Instanciation du modèle de jeu
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		Database db = new Database();
-		model = Crossword.createPuzzle(db, 10);
+
+		// Instanciation du modèle de jeu
+
+		model = Crossword.createPuzzle(db, MainCrossword.getPuzzleNumber());
 		BOARD_HEIGHT = model.getHeight();
 		BOARD_WIDTH = model.getWidth();
 

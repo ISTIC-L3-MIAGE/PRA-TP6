@@ -1,4 +1,4 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.models;
 
 public class Clue {
 	private final String clue;

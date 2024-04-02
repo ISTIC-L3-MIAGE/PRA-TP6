@@ -1,5 +1,6 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.models;
 
+import bah.tahi.crossword.utils.UIDesign;
 import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -163,7 +164,6 @@ public class CrosswordSquare extends Label {
 		// Les évènements liés à la souris
 		setOnMouseEntered(event -> {
 			if (!blackProperty().get()) {
-				// setBackground(UIDesign.greyBg);
 				setCursor(Cursor.HAND); // On change le curseur au survol de la souris d'une case qui n'est pas noire.
 			}
 		});
