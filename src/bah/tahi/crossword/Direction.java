@@ -1,4 +1,4 @@
-package bah.tahi.crossword.models;
+package bah.tahi.crossword;
 
 public enum Direction {
 	HORIZONTAL, VERTICAL;

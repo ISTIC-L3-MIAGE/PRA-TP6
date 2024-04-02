@@ -1,14 +1,8 @@
-package bah.tahi.crossword.controllers;
+package bah.tahi.crossword;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import bah.tahi.crossword.MainCrossword;
-import bah.tahi.crossword.models.Clue;
-import bah.tahi.crossword.models.Crossword;
-import bah.tahi.crossword.models.CrosswordSquare;
-import bah.tahi.crossword.models.Direction;
-import bah.tahi.crossword.utils.Database;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;

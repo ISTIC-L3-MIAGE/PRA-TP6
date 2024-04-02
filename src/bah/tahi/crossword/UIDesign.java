@@ -1,4 +1,4 @@
-package bah.tahi.crossword.utils;
+package bah.tahi.crossword;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;

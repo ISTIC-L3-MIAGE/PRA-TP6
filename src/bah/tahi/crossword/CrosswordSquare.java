@@ -1,6 +1,5 @@
-package bah.tahi.crossword.models;
+package bah.tahi.crossword;
 
-import bah.tahi.crossword.utils.UIDesign;
 import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

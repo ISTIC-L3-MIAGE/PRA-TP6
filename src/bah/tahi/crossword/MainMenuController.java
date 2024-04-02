@@ -1,12 +1,10 @@
-package bah.tahi.crossword.controllers;
+package bah.tahi.crossword;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import bah.tahi.crossword.MainCrossword;
-import bah.tahi.crossword.utils.Database;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class MainMenuController implements Initializable {
@@ -53,8 +51,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	public void play() throws IOException {
-		AnchorPane root = (AnchorPane) FXMLLoader
-				.load(getClass().getResource("bah.tahi.crossword.controllers.mainMenuScene.fxml"));
+		HBox root = (HBox) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
 		Scene scene = new Scene(root);
 
 		Stage stage = MainCrossword.getStage();

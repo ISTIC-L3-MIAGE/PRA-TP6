@@ -1,4 +1,4 @@
-package bah.tahi.crossword.utils;
+package bah.tahi.crossword;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-
-import bah.tahi.crossword.models.Crossword;
 
 /**
  * Classe permettant d'établir une connexion avec la base de données et charger

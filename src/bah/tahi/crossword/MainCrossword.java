@@ -27,8 +27,7 @@ public class MainCrossword extends Application {
 	public void start(Stage stage) throws Exception {
 		try {
 			// TODO: Fix this
-			Pane root = (Pane) FXMLLoader
-					.load(getClass().getResource("/bah/tahi/crossword/controllers/mainMenuScene.fxml"));
+			Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
 			Scene scene = new Scene(root);
 
 			this.stage = stage;
