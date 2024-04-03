@@ -125,9 +125,6 @@ public class CrosswordSquare extends Label {
 	 * Constructeur.
 	 */
 	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
-		// Styles
-		Font normalFont = new Font((double) 150 / crossword.getHeight()); // Police normale
-
 		// Animations
 		ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), this);
 		scaleTransition.setFromX(0); // Échelle de départ (rétrécie)
@@ -135,23 +132,19 @@ public class CrosswordSquare extends Label {
 		scaleTransition.setToX(1.0); // Échelle d'arrivée (taile normale)
 		scaleTransition.setToY(1.0);
 
-		setFont(normalFont); // On applique la police normale à l'initialisation
-		setBorder(UIDesign.border); // On applique les bordures à l'initialisation
-		setAlignment(Pos.CENTER); // Centrer le texte dans une case
-		setBackground(UIDesign.blackBg); // Couleur par défaut d'une case
-		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Taille pour que la case occupe tout l'espace disponible dans
+		// Styles
+		Font normalFont = new Font((double) 150 / crossword.getHeight()); // Police
+
+		setFont(normalFont);
+		setBorder(UIDesign.border);
+		setAlignment(Pos.CENTER);
+		setBackground(UIDesign.blackBg);
+		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 		// Bindings
 		textProperty().bind(propositionProperty());
 
 		// Les observateurs
-		focusedProperty().addListener((observable, oldValue, newValue) -> {
-			setBorder(newValue ? UIDesign.focusedBorder : UIDesign.border);
-			if (horizontal != null) {
-				// crossword.getHorizontalClues()
-			}
-		});
-
 		blackProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
 				propositionProperty().set(null);
@@ -159,6 +152,13 @@ public class CrosswordSquare extends Label {
 			} else {
 				propositionProperty().set(BLANK_CHAR);
 				setBackground(UIDesign.whiteBg);
+			}
+		});
+
+		focusedProperty().addListener((observable, oldValue, newValue) -> {
+			setBorder(newValue ? UIDesign.focusedBorder : UIDesign.border);
+			if (horizontal != null) {
+				// crossword.getHorizontalClues()
 			}
 		});
 
@@ -186,7 +186,6 @@ public class CrosswordSquare extends Label {
 
 		setOnMouseExited(event -> {
 			if (!blackProperty().get()) {
-				// setBackground(UIDesign.whiteBg);
 				setCursor(Cursor.DEFAULT); // On remet le curseur par défaut de la souris.
 			}
 		});
@@ -200,27 +199,27 @@ public class CrosswordSquare extends Label {
 
 				switch (event.getCode()) {
 
-				case UP:
+				case UP: // Touche directionnelle HAUT
 					crossword.directionProperty().set(Direction.VERTICAL);
 					nextRow--;
 					break;
 
-				case DOWN:
+				case DOWN: // Touche directionnelle BAS
 					crossword.directionProperty().set(Direction.VERTICAL);
 					nextRow++;
 					break;
 
-				case LEFT:
+				case LEFT: // Touche directionnelle GAUCHE
 					crossword.directionProperty().set(Direction.HORIZONTAL);
 					nextColumn--;
 					break;
 
-				case RIGHT:
+				case RIGHT: // Touche directionnelle DROITE
 					crossword.directionProperty().set(Direction.HORIZONTAL);
 					nextColumn++;
 					break;
 
-				case BACK_SPACE:
+				case BACK_SPACE: // Touche d'effacement
 					propositionProperty().set(BLANK_CHAR);
 					if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
 						nextColumn--;
@@ -229,7 +228,7 @@ public class CrosswordSquare extends Label {
 					}
 					break;
 
-				case ENTER:
+				case ENTER: // Touche entrée
 					for (int i = 0; i < crossword.getHeight(); i++) {
 						for (int j = 0; j < crossword.getWidth(); j++) {
 							CrosswordSquare square = crossword.getCell(i, j);
@@ -238,8 +237,9 @@ public class CrosswordSquare extends Label {
 					}
 					break;
 
-				default:
+				default: // Les autres touches
 					String keyPressed = event.getText().toUpperCase();
+
 					if (!keyPressed.isEmpty() && Character.isLetter(keyPressed.charAt(0))) {
 						propositionProperty().set(keyPressed);
 						if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
