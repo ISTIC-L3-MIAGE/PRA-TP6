@@ -1,5 +1,10 @@
 package bah.tahi.crossword;
 
+/**
+ * Classe représentant une grille d'éléments.
+ * 
+ * @param <T> type des éléments de la grille.
+ */
 public class Grid<T> {
 
 	/**
@@ -12,6 +17,9 @@ public class Grid<T> {
 	 */
 	private T[][] grid;
 
+	/**
+	 * Constructeur.
+	 */
 	public Grid(int height, int width) {
 		this.height = height;
 		this.width = width;

@@ -19,6 +19,9 @@ public class Database {
 	 */
 	private Connection conn;
 
+	/**
+	 * Constructeur.
+	 */
 	public Database() {
 		try {
 			conn = connectToDB();
@@ -34,7 +37,6 @@ public class Database {
 	 * @throws SQLException en cas d'échec de connexion
 	 */
 	private Connection connectToDB() throws SQLException {
-		// Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://localhost/base_pra_tp6";
 		return DriverManager.getConnection(url, "root", "");
 	}
@@ -58,7 +60,7 @@ public class Database {
 	 *         les noms des grilles.
 	 */
 	public Map<Integer, String> availableGrids() {
-		if (!connected()) { // Rien à faire s'il n'y a pas de lien à la BD
+		if (!connected()) { // Rien à faire s'il n'y a pas de lien à la BD.
 			return null;
 		}
 
@@ -105,7 +107,7 @@ public class Database {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-			if (!rs.next()) {
+			if (!rs.next()) { // Si pas de grille trouvée...
 				return null;
 			}
 
@@ -137,7 +139,6 @@ public class Database {
 			return crossword;
 		} catch (SQLException e) {
 			System.out.println("[ERROR] Error in Database.extractGrid()");
-			e.printStackTrace();
 			return null;
 		}
 	}

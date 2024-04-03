@@ -6,15 +6,18 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-// Le plateau de jeu est toujours symétrique
+/**
+ * Modèle de jeu.
+ */
 public class Crossword extends Grid<CrosswordSquare> {
+
 	/**
-	 * Liste observant les indices verticaux.
+	 * Liste des indices verticaux.
 	 */
 	private ObservableList<Clue> verticalClues = FXCollections.observableArrayList();
 
 	/**
-	 * Liste observant les indices horizontaux.
+	 * Liste des indices horizontaux.
 	 */
 	private ObservableList<Clue> horizontalClues = FXCollections.observableArrayList();
 
@@ -23,9 +26,16 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 */
 	private ObjectProperty<Direction> direction = new SimpleObjectProperty<>(Direction.HORIZONTAL);
 
+	/**
+	 * Constructeur
+	 * 
+	 * @param height hauteur de la grille.
+	 * @param width  largeur de la grille.
+	 */
 	public Crossword(int height, int width) {
 		super(height, width);
 
+		// Création des cases de la grille
 		for (int row = 0; row < getHeight(); row++) {
 			for (int column = 0; column < getWidth(); column++) {
 				CrosswordSquare square = new CrosswordSquare(this, row, column);
@@ -50,8 +60,12 @@ public class Crossword extends Grid<CrosswordSquare> {
 		return getCell(row, column).propositionProperty();
 	}
 
+	/**
+	 * @param database     le gestionnaire de BD.
+	 * @param puzzleNumber le numéro de la grille à récupérer en BD.
+	 * @return une grile de mots croisés chargée depuis la BD.
+	 */
 	public static Crossword createPuzzle(Database database, int puzzleNumber) {
-		// return CrosswordHolder.INSTANCE; // test
 		return database.extractGrid(puzzleNumber);
 	}
 
@@ -155,10 +169,16 @@ public class Crossword extends Grid<CrosswordSquare> {
 		}
 	}
 
+	/**
+	 * @return la liste des indices verticaux.
+	 */
 	public ObservableList<Clue> getVerticalClues() {
 		return verticalClues;
 	}
 
+	/**
+	 * @return la liste des indices horizontaux.
+	 */
 	public ObservableList<Clue> getHorizontalClues() {
 		return horizontalClues;
 	}

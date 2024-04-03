@@ -9,13 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 
+/**
+ * Controleur du menu principal.
+ */
 public class MainMenuController implements Initializable {
+
+	/**
+	 * Liste déroulante des grilles disponibles.
+	 */
+	@FXML
+	private ChoiceBox<String> gridChoices;
 
 	/**
 	 * Bouton pour commencer une partie.
@@ -23,39 +30,39 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private Button playBtn;
 
-	/**
-	 * Bouton pour commencer une partie.
-	 */
-	@FXML
-	private ChoiceBox<String> gridChoices;
-
 	@FXML
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// Menu
+		// Chargement des grilles disponibles dans notre liste déroulante
 		Database db = new Database();
 		Map<Integer, String> grids = db.availableGrids();
+		gridChoices.setItems(FXCollections.observableArrayList(grids.values()));
 
-		gridChoices.setItems(FXCollections.observableArrayList(grids.values()));// .getItems().addAll(availableGrids);
+		// Ecouteur du changement de l'élément sélectionné dans la liste déroulante
 		gridChoices.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue != null) {
-				MainCrossword.setPuzzleNumber(gridChoices.getSelectionModel().getSelectedIndex() + 1);
+				Main.setPuzzleNumber(gridChoices.getSelectionModel().getSelectedIndex() + 1);
 				playBtn.setDisable(false);
 			}
 		});
 
+		// Action au clic du bouton JOUER
 		playBtn.setOnAction(event -> {
-			if (MainCrossword.getPuzzleNumber() != 0) {
+			if (Main.getPuzzleNumber() != 0) {
 				play();
 			}
 		});
 	}
 
-	public void play() {
+	/**
+	 * Démarrer une partie.
+	 * 
+	 * @pre puzzleNumber != 0 (Il faut avoir choisit une grille avant de lancer une
+	 *      partie)
+	 */
+	private void play() {
 		try {
-			AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("endGameScene.fxml"));
-			Scene scene = new Scene(root);
-			Stage stage = MainCrossword.getStage();
-			stage.setScene(scene);
+			Pane view = (Pane) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
+			Main.setView(view);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

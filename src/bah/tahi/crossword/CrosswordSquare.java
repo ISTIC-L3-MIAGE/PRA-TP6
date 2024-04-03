@@ -11,8 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+/**
+ * Classe représentant les cases d'une grille.
+ */
 public class CrosswordSquare extends Label {
 
+	/**
+	 * Le caractère d'une case vide.
+	 */
 	public static final String BLANK_CHAR = " ";
 
 	/**
@@ -61,7 +67,6 @@ public class CrosswordSquare extends Label {
 	 */
 	public final void setSolution(char solution) {
 		this.solution = solution;
-		// propositionProperty().set(Character.toString(solution));
 	}
 
 	/**
@@ -93,12 +98,19 @@ public class CrosswordSquare extends Label {
 		return horizontal ? this.horizontal.getClue() : vertical.getClue();
 	}
 
+	/**
+	 * Définir this comme case courante.
+	 */
 	public final void setAsCurrentSquare() {
 		if (!blackProperty().get()) {
-			requestFocus(); // Donne le focus à la case cliquée
+			requestFocus();
 		}
 	}
 
+	/**
+	 * Vérifie si la proposition faite par le joueur dans cette case correspond à la
+	 * solution.
+	 */
 	public final void checkProposition() {
 		if (!blackProperty().get()) {
 			if (propositionProperty().get().charAt(0) == getSolution()) {
@@ -109,10 +121,12 @@ public class CrosswordSquare extends Label {
 		}
 	}
 
+	/**
+	 * Constructeur.
+	 */
 	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
 		// Styles
-		Font normalFont = new Font((double) 100 / crossword.getHeight()); // Police normale
-		Font bigFont = new Font((double) 150 / crossword.getHeight()); // Police en cas de victoire
+		Font normalFont = new Font((double) 150 / crossword.getHeight()); // Police normale
 
 		// Animations
 		ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), this);

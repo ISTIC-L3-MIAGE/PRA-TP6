@@ -8,6 +8,9 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.paint.Color;
 
+/**
+ * Classe abstraite regroupant les styles de l'application.
+ */
 public abstract class UIDesign {
 	public final static Background whiteBg = new Background(new BackgroundFill(Color.WHITE, null, null)); // Le fond des
 																											// cases

@@ -7,11 +7,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
+/**
+ * Controleur de l'écran de fin de partie.
+ */
 public class EndGameController implements Initializable {
 
 	/**
@@ -25,12 +26,13 @@ public class EndGameController implements Initializable {
 		replayBtn.setOnAction(event -> replay());
 	}
 
+	/**
+	 * Retroune sur le menu principal pour commencer une nouvelle partie.
+	 */
 	public void replay() {
 		try {
-			Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
-			Scene scene = new Scene(root);
-			Stage stage = MainCrossword.getStage();
-			stage.setScene(scene);
+			Pane view = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
+			Main.setView(view);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

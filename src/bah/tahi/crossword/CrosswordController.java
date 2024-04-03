@@ -44,7 +44,7 @@ public class CrosswordController implements Initializable {
 
 		// Instanciation du modèle de jeu
 
-		model = Crossword.createPuzzle(db, MainCrossword.getPuzzleNumber());
+		model = Crossword.createPuzzle(db, Main.getPuzzleNumber());
 		BOARD_HEIGHT = model.getHeight();
 		BOARD_WIDTH = model.getWidth();
 
