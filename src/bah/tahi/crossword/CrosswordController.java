@@ -1,14 +1,17 @@
 package bah.tahi.crossword;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 
 public class CrosswordController implements Initializable {
@@ -70,8 +73,15 @@ public class CrosswordController implements Initializable {
 			}
 		});
 
-		model.directionProperty().addListener((observable, oldValue, newValue) -> {
-
+		model.winProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				try {
+					Pane view = (Pane) FXMLLoader.load(getClass().getResource("endGameScene.fxml"));
+					Main.setView(view);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		});
 
 		// Initialisation de la grille et de son conteneur
@@ -104,28 +114,6 @@ public class CrosswordController implements Initializable {
 
 		// Ajout de la grille à son conteneur
 		gridContainer.getChildren().add(grid);
-
-		// Évènement du bouton RESTART
-		/*
-		 * restartButton.setOnAction(event -> model.restart());
-		 * 
-		 * 
-		 * // Binding des labels
-		 * gameOverLabel.textProperty().bind(model.getEndOfGameMessage());
-		 * 
-		 * freeCasesLabel.visibleProperty().bind(model.gameOver().not());
-		 * freeCasesLabel.textProperty().bind(model.getScore(Owner.NONE).asString().
-		 * concat(" case(s) libre(s)"));
-		 * 
-		 * firstCasesLabel.styleProperty().bind(model.getOwnerLabelStyle(Owner.FIRST));
-		 * firstCasesLabel.textProperty().bind(model.getScore(Owner.FIRST).asString().
-		 * concat(" case(s) pour X"));
-		 * 
-		 * secondCasesLabel.styleProperty().bind(model.getOwnerLabelStyle(Owner.SECOND))
-		 * ;
-		 * secondCasesLabel.textProperty().bind(model.getScore(Owner.SECOND).asString().
-		 * concat(" case(s) pour O"));
-		 */
 	}
 
 }

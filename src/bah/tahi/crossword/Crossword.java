@@ -1,6 +1,8 @@
 package bah.tahi.crossword;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -27,6 +29,11 @@ public class Crossword extends Grid<CrosswordSquare> {
 	private ObjectProperty<Direction> direction = new SimpleObjectProperty<>(Direction.HORIZONTAL);
 
 	/**
+	 * Direction courante.
+	 */
+	private BooleanProperty win = new SimpleBooleanProperty(false);
+
+	/**
 	 * Constructeur
 	 * 
 	 * @param height hauteur de la grille.
@@ -42,6 +49,13 @@ public class Crossword extends Grid<CrosswordSquare> {
 				setCell(row, column, square);
 			}
 		}
+	}
+
+	/**
+	 * @return l'observateur de la victoire.
+	 */
+	public BooleanProperty winProperty() {
+		return win;
 	}
 
 	/**
@@ -187,6 +201,23 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	public void printSolution() {
+	}
+
+	/**
+	 * Vérifie si toutes les propositions faites par le joueur correspondent aux
+	 * solutions des cases.
+	 */
+	public void checkWin() {
+		boolean win = true;
+
+		for (int i = 0; i < getHeight(); i++) {
+			for (int j = 0; j < getWidth(); j++) {
+				CrosswordSquare square = getCell(i, j);
+				win &= square.checkProposition();
+			}
+		}
+
+		winProperty().set(win);
 	}
 
 }

@@ -110,15 +110,22 @@ public class CrosswordSquare extends Label {
 	/**
 	 * Vérifie si la proposition faite par le joueur dans cette case correspond à la
 	 * solution.
+	 * 
+	 * @return true si la proposition faite par le joueur correspond à la solution
+	 *         de la case, false sinon.
 	 */
-	public final void checkProposition() {
+	public final boolean checkProposition() {
 		if (!blackProperty().get()) {
 			if (propositionProperty().get().charAt(0) == getSolution()) {
 				setBackground(UIDesign.greenBg);
+				return true;
 			} else {
 				setBackground(UIDesign.whiteBg);
+				return false;
 			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -229,12 +236,7 @@ public class CrosswordSquare extends Label {
 					break;
 
 				case ENTER: // Touche entrée
-					for (int i = 0; i < crossword.getHeight(); i++) {
-						for (int j = 0; j < crossword.getWidth(); j++) {
-							CrosswordSquare square = crossword.getCell(i, j);
-							square.checkProposition();
-						}
-					}
+					crossword.checkWin();
 					break;
 
 				default: // Les autres touches
