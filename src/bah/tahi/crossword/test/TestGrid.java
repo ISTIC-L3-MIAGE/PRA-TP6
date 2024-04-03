@@ -3,7 +3,7 @@ package bah.tahi.crossword.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import bah.tahi.crossword.Grid;
+import bah.tahi.crossword.models.Grid;
 
 import static org.junit.jupiter.api.Assertions.*;
 

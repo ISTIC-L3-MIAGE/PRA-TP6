@@ -1,4 +1,4 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.models;
 
 /**
  * Enumérations des directions.

@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import bah.tahi.crossword.models.Clue;
+import bah.tahi.crossword.models.Crossword;
+import bah.tahi.crossword.models.CrosswordSquare;
+import bah.tahi.crossword.models.Direction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

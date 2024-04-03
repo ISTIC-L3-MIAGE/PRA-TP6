@@ -1,4 +1,4 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.models;
 
 /**
  * Classe représentant l'indice d'une solution.
