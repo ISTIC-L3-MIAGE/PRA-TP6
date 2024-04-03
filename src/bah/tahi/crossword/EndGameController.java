@@ -1,0 +1,38 @@
+package bah.tahi.crossword;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+public class EndGameController implements Initializable {
+
+	/**
+	 * Bouton pour recommencer une partie.
+	 */
+	@FXML
+	private Button replayBtn;
+
+	@FXML
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		replayBtn.setOnAction(event -> replay());
+	}
+
+	public void replay() {
+		try {
+			Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
+			Scene scene = new Scene(root);
+			Stage stage = MainCrossword.getStage();
+			stage.setScene(scene);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

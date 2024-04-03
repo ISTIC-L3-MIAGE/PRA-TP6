@@ -12,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class MainMenuController implements Initializable {
@@ -52,18 +52,12 @@ public class MainMenuController implements Initializable {
 
 	public void play() {
 		try {
-			HBox root = (HBox) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
+			AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource("endGameScene.fxml"));
 			Scene scene = new Scene(root);
-
 			Stage stage = MainCrossword.getStage();
-			stage.setTitle("Crossword puzzle");
 			stage.setScene(scene);
-			stage.sizeToScene();
-			stage.setResizable(false);
-			stage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 }

@@ -33,7 +33,6 @@ public class MainCrossword extends Application {
 
 			scene.setOnKeyPressed(event -> {
 				if (event.isControlDown() && event.getCode() == KeyCode.W) {
-					// Fermer la fenêtre courante si Ctrl + W est enfoncé
 					stage.close();
 				}
 			});
