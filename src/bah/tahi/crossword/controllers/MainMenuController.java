@@ -65,6 +65,7 @@ public class MainMenuController implements Initializable {
 		try {
 			Pane view = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/views/crosswordScene.fxml"));
 			Main.setView(view);
+			Main.saveGameStartTime();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

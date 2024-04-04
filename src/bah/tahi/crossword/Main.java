@@ -1,5 +1,7 @@
 package bah.tahi.crossword;
 
+import java.time.Duration;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +18,11 @@ public class Main extends Application {
 	 * La fenêtre.
 	 */
 	private static Scene scene;
+
+	/**
+	 * Mesure du temps écoulé.
+	 */
+	private static long gameStartTime, gameEndTime;
 
 	/**
 	 * Le numéro de la grille choisie par le joueur (0 si pas de choix fait).
@@ -36,6 +43,28 @@ public class Main extends Application {
 	 */
 	public static void setPuzzleNumber(int puzzleNumber) {
 		Main.puzzleNumber = puzzleNumber;
+	}
+
+	/**
+	 * Enregistrer le temps de départ d'une partie.
+	 */
+	public static void saveGameStartTime() {
+		gameStartTime = System.currentTimeMillis();
+	}
+
+	/**
+	 * Enregistrer le temps de fin d'une partie.
+	 */
+	public static void saveGameEndTime() {
+		gameEndTime = System.currentTimeMillis();
+	}
+
+	/**
+	 * @return la durée d'une partie.
+	 */
+	public static Duration getGameDuration() {
+		saveGameEndTime();
+		return Duration.ofMillis(gameEndTime - gameStartTime);
 	}
 
 	/**
