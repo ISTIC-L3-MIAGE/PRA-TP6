@@ -172,16 +172,9 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 * @param column     numéro de colonne.
 	 * @param definition la definition à affecter.
 	 */
-	public void setDefinition(int row, int column, boolean horizontal, String definition) {
-		Clue clue = new Clue(definition, row, column, horizontal);
+	public void setDefinition(int row, int column, boolean horizontal, Clue definition) {
 		CrosswordSquare square = getCell(row, column);
-		square.setDefinition(clue, horizontal);
-
-		if (horizontal) {
-			horizontalClues.add(clue);
-		} else {
-			verticalClues.add(clue);
-		}
+		square.setDefinition(definition, horizontal);
 	}
 
 	/**

@@ -63,17 +63,19 @@ public class CrosswordController implements Initializable {
 
 		horizontalIndexes.getStyleClass().add("current-direction");
 
-		horizontalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-			if (newValue != null) {
-				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());
+		horizontalIndexes.setOnMouseClicked(event -> {
+			Clue selectedItem = horizontalIndexes.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				CrosswordSquare square = model.getCell(selectedItem.getRow(), selectedItem.getColumn());
 				square.setAsCurrentSquare();
 				model.directionProperty().set(Direction.HORIZONTAL);
 			}
 		});
 
-		verticalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-			if (newValue != null) {
-				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());
+		verticalIndexes.setOnMouseClicked(event -> {
+			Clue selectedItem = verticalIndexes.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				CrosswordSquare square = model.getCell(selectedItem.getRow(), selectedItem.getColumn());
 				square.setAsCurrentSquare();
 				model.directionProperty().set(Direction.VERTICAL);
 			}
@@ -125,18 +127,24 @@ public class CrosswordController implements Initializable {
 			for (j = 0; j < BOARD_WIDTH; j++) {
 				CrosswordSquare square = model.getCell(i, j);
 
-				/*
-				 * square.focusedProperty().addListener((observable, oldValue, newValue) -> { if
-				 * (newValue) { Clue horizontal = square.getDefinition(true); Clue vertical =
-				 * square.getDefinition(false);
-				 * 
-				 * if (horizontal != null) {
-				 * horizontalIndexes.getSelectionModel().select(horizontal); } else {
-				 * horizontalIndexes.getSelectionModel().clearSelection(); }
-				 * 
-				 * if (vertical != null) { verticalIndexes.getSelectionModel().select(vertical);
-				 * } else { horizontalIndexes.getSelectionModel().clearSelection(); } } });
-				 */
+				square.focusedProperty().addListener((observable, oldValue, newValue) -> {
+					if (newValue) {
+						Clue horizontal = square.getDefinition(true);
+						Clue vertical = square.getDefinition(false);
+
+						if (horizontal != null) {
+							horizontalIndexes.getSelectionModel().select(horizontal);
+						} else {
+							horizontalIndexes.getSelectionModel().clearSelection();
+						}
+
+						if (vertical != null) {
+							verticalIndexes.getSelectionModel().select(vertical);
+						} else {
+							horizontalIndexes.getSelectionModel().clearSelection();
+						}
+					}
+				});
 
 				grid.add(square, j, i);
 			}

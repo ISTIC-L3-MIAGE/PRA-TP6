@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import bah.tahi.crossword.models.Clue;
 import bah.tahi.crossword.models.Crossword;
 
 /**
@@ -125,17 +126,24 @@ public class Database {
 				int colonne = rs.getInt("colonne") - 1;
 				String solution = rs.getString("solution").toUpperCase();
 
+				Clue clue = new Clue(definition, ligne, colonne, horizontal);
+				if (horizontal) {
+					crossword.getHorizontalClues().add(clue);
+				} else {
+					crossword.getVerticalClues().add(clue);
+				}
+
 				for (int i = 0; i < solution.length(); i++) {
 					if (horizontal) {
 						crossword.setBlackSquare(ligne, colonne + i, false);
 						crossword.setSolution(ligne, colonne + i, solution.charAt(i));
+						crossword.setDefinition(ligne, colonne + i, horizontal, clue);
 					} else {
 						crossword.setBlackSquare(ligne + i, colonne, false);
 						crossword.setSolution(ligne + i, colonne, solution.charAt(i));
+						crossword.setDefinition(ligne + i, colonne, horizontal, clue);
 					}
 				}
-
-				crossword.setDefinition(ligne, colonne, horizontal, definition);
 
 			} while (rs.next());
 

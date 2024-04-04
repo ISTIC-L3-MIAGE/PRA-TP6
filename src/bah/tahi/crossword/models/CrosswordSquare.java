@@ -130,7 +130,9 @@ public class CrosswordSquare extends Label {
 	public final boolean checkProposition() {
 		if (!isBlackSquare()) {
 			if (propositionProperty().get().charAt(0) == getSolution()) {
-				getStyleClass().add("correct");
+				if (!getStyleClass().contains("correct")) {
+					getStyleClass().add("correct");
+				}
 				return true;
 			} else {
 				getStyleClass().remove("correct");
@@ -219,6 +221,8 @@ public class CrosswordSquare extends Label {
 
 				case BACK_SPACE: // Touche d'effacement
 					propositionProperty().set(BLANK_CHAR);
+					getStyleClass().remove("correct");
+
 					if (crossword.directionProperty().get().equals(Direction.HORIZONTAL)) {
 						nextColumn--;
 					} else {
