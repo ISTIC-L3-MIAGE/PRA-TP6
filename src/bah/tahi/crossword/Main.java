@@ -66,6 +66,7 @@ public class Main extends Application {
 			stage.setScene(scene);
 			stage.sizeToScene();
 			stage.setResizable(false);
+			scene.getStylesheets().add("/bah/tahi/crossword/style.css");
 
 			// Affichage de la fenêtre
 			stage.show();

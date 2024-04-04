@@ -1,9 +1,11 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.controllers;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import bah.tahi.crossword.Database;
+import bah.tahi.crossword.Main;
 import bah.tahi.crossword.models.Clue;
 import bah.tahi.crossword.models.Crossword;
 import bah.tahi.crossword.models.CrosswordSquare;
@@ -59,7 +61,7 @@ public class CrosswordController implements Initializable {
 		horizontalIndexes.setItems(model.getHorizontalClues());
 		verticalIndexes.setItems(model.getVerticalClues());
 
-		// horizontalIndexes.getSelectionModel().selectedItemProperty();
+		horizontalIndexes.getStyleClass().add("current-direction");
 
 		horizontalIndexes.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue != null) {
@@ -74,6 +76,16 @@ public class CrosswordController implements Initializable {
 				CrosswordSquare square = model.getCell(newValue.getRow(), newValue.getColumn());
 				square.setAsCurrentSquare();
 				model.directionProperty().set(Direction.VERTICAL);
+			}
+		});
+
+		model.directionProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue == Direction.VERTICAL) {
+				verticalIndexes.getStyleClass().add("current-direction");
+				horizontalIndexes.getStyleClass().remove("current-direction");
+			} else {
+				horizontalIndexes.getStyleClass().add("current-direction");
+				verticalIndexes.getStyleClass().remove("current-direction");
 			}
 		});
 
@@ -112,6 +124,20 @@ public class CrosswordController implements Initializable {
 		for (i = 0; i < BOARD_HEIGHT; i++) {
 			for (j = 0; j < BOARD_WIDTH; j++) {
 				CrosswordSquare square = model.getCell(i, j);
+
+				/*
+				 * square.focusedProperty().addListener((observable, oldValue, newValue) -> { if
+				 * (newValue) { Clue horizontal = square.getDefinition(true); Clue vertical =
+				 * square.getDefinition(false);
+				 * 
+				 * if (horizontal != null) {
+				 * horizontalIndexes.getSelectionModel().select(horizontal); } else {
+				 * horizontalIndexes.getSelectionModel().clearSelection(); }
+				 * 
+				 * if (vertical != null) { verticalIndexes.getSelectionModel().select(vertical);
+				 * } else { horizontalIndexes.getSelectionModel().clearSelection(); } } });
+				 */
+
 				grid.add(square, j, i);
 			}
 		}

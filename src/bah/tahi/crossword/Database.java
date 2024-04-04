@@ -125,8 +125,6 @@ public class Database {
 				int colonne = rs.getInt("colonne") - 1;
 				String solution = rs.getString("solution").toUpperCase();
 
-				crossword.setDefinition(ligne, colonne, horizontal, definition);
-
 				for (int i = 0; i < solution.length(); i++) {
 					if (horizontal) {
 						crossword.setBlackSquare(ligne, colonne + i, false);
@@ -136,6 +134,9 @@ public class Database {
 						crossword.setSolution(ligne + i, colonne, solution.charAt(i));
 					}
 				}
+
+				crossword.setDefinition(ligne, colonne, horizontal, definition);
+
 			} while (rs.next());
 
 			return crossword;

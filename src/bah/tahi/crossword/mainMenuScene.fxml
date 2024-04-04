@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bah.tahi.crossword.MainMenuController">
+<Pane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bah.tahi.crossword.controllers.MainMenuController">
    <children>
       <Label layoutX="256.0" layoutY="113.0" style="-fx-background-color: white;" text="Mots Croisés" textAlignment="CENTER">
          <font>

@@ -30,7 +30,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	private ObjectProperty<Direction> direction = new SimpleObjectProperty<>(Direction.HORIZONTAL);
 
 	/**
-	 * Direction courante.
+	 * Etat d'une partie.
 	 */
 	private BooleanProperty win = new SimpleBooleanProperty(false);
 
@@ -53,17 +53,17 @@ public class Crossword extends Grid<CrosswordSquare> {
 	}
 
 	/**
-	 * @return l'observateur de la victoire.
-	 */
-	public BooleanProperty winProperty() {
-		return win;
-	}
-
-	/**
 	 * @return l'observateur de la direction courante.
 	 */
 	public ObjectProperty<Direction> directionProperty() {
 		return direction;
+	}
+
+	/**
+	 * @return l'observateur de l'état de la partie.
+	 */
+	public BooleanProperty winProperty() {
+		return win;
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 */
 	public boolean isBlackSquare(int row, int column) {
 		if (correctCoords(row, column)) {
-			return getCell(row, column).blackProperty().get();
+			return getCell(row, column).isBlackSquare();
 		} else {
 			throw new RuntimeException();
 		}
@@ -107,7 +107,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 */
 	public void setBlackSquare(int row, int column, boolean black) {
 		if (correctCoords(row, column)) {
-			getCell(row, column).blackProperty().set(black);
+			getCell(row, column).setBlackSquare(black);
 		} else {
 			throw new RuntimeException();
 		}
@@ -162,7 +162,7 @@ public class Crossword extends Grid<CrosswordSquare> {
 	 */
 	public String getDefinition(int row, int column, boolean horizontal) {
 		CrosswordSquare square = getCell(row, column);
-		return square.getDefinition(horizontal);
+		return square.getDefinition(horizontal).getClue();
 	}
 
 	/**

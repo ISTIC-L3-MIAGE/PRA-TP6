@@ -1,13 +1,8 @@
 package bah.tahi.crossword.models;
 
-import bah.tahi.crossword.UIDesign;
 import javafx.animation.ScaleTransition;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -45,7 +40,7 @@ public class CrosswordSquare extends Label {
 	/**
 	 * Noircissement de la case.
 	 */
-	private final BooleanProperty black = new SimpleBooleanProperty(true);
+	private boolean black;
 
 	/**
 	 * @return l'observateur de la proposition faite par le joueur.
@@ -55,9 +50,26 @@ public class CrosswordSquare extends Label {
 	}
 
 	/**
-	 * @return l'observateur du noiricissement de la case.
+	 * Noircir une case.
+	 * 
+	 * @param black mettre à true pour noiricir la case, false pour la blanchir.
 	 */
-	public final BooleanProperty blackProperty() {
+	public void setBlackSquare(boolean black) {
+		this.black = black;
+		if (black) {
+			propositionProperty().set(null);
+			getStyleClass().add("black");
+		} else {
+			propositionProperty().set(BLANK_CHAR);
+			getStyleClass().remove("black");
+		}
+
+	}
+
+	/**
+	 * @return true si this est une case noire, false sinon.
+	 */
+	public boolean isBlackSquare() {
 		return black;
 	}
 
@@ -95,15 +107,15 @@ public class CrosswordSquare extends Label {
 	 *                   la définition du mot vertical.
 	 * @return la définition de la case.
 	 */
-	public final String getDefinition(boolean horizontal) {
-		return horizontal ? this.horizontal.getClue() : vertical.getClue();
+	public final Clue getDefinition(boolean horizontal) {
+		return horizontal ? this.horizontal : vertical;
 	}
 
 	/**
 	 * Définir this comme case courante.
 	 */
 	public final void setAsCurrentSquare() {
-		if (!blackProperty().get()) {
+		if (!isBlackSquare()) {
 			requestFocus();
 		}
 	}
@@ -116,12 +128,12 @@ public class CrosswordSquare extends Label {
 	 *         de la case, false sinon.
 	 */
 	public final boolean checkProposition() {
-		if (!blackProperty().get()) {
+		if (!isBlackSquare()) {
 			if (propositionProperty().get().charAt(0) == getSolution()) {
-				setBackground(UIDesign.greenBg);
+				getStyleClass().add("correct");
 				return true;
 			} else {
-				setBackground(UIDesign.whiteBg);
+				getStyleClass().remove("correct");
 				return false;
 			}
 		}
@@ -133,6 +145,10 @@ public class CrosswordSquare extends Label {
 	 * Constructeur.
 	 */
 	public CrosswordSquare(final Crossword crossword, final int row, final int column) {
+		// Style de base d'une case
+		getStyleClass().add("crossword-square");
+		setBlackSquare(true);
+
 		// Animations
 		ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), this);
 		scaleTransition.setFromX(0); // Échelle de départ (rétrécie)
@@ -144,29 +160,15 @@ public class CrosswordSquare extends Label {
 		Font normalFont = new Font((double) 150 / crossword.getHeight()); // Police
 
 		setFont(normalFont);
-		setBorder(UIDesign.border);
-		setAlignment(Pos.CENTER);
-		setBackground(UIDesign.blackBg);
 		setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 		// Bindings
 		textProperty().bind(propositionProperty());
 
 		// Les observateurs
-		blackProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				propositionProperty().set(null);
-				setBackground(UIDesign.blackBg);
-			} else {
-				propositionProperty().set(BLANK_CHAR);
-				setBackground(UIDesign.whiteBg);
-			}
-		});
-
 		focusedProperty().addListener((observable, oldValue, newValue) -> {
-			setBorder(newValue ? UIDesign.focusedBorder : UIDesign.border);
 			if (horizontal != null) {
-				// crossword.getHorizontalClues()
+				// crossword.getHorizontalClues();
 			}
 		});
 
@@ -180,24 +182,12 @@ public class CrosswordSquare extends Label {
 				scaleTransition.playFromStart();
 
 				if (!newValue.equals(oldValue)) {
-					setBackground(UIDesign.whiteBg);
+					getStyleClass().remove("correct");
 				}
 			}
 		});
 
 		// Les évènements liés à la souris
-		setOnMouseEntered(event -> {
-			if (!blackProperty().get()) {
-				setCursor(Cursor.HAND); // On change le curseur au survol de la souris d'une case qui n'est pas noire.
-			}
-		});
-
-		setOnMouseExited(event -> {
-			if (!blackProperty().get()) {
-				setCursor(Cursor.DEFAULT); // On remet le curseur par défaut de la souris.
-			}
-		});
-
 		setOnMouseClicked(event -> setAsCurrentSquare());
 
 		// Détection des touches du clavier

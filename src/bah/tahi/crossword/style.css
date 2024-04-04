@@ -1,0 +1,39 @@
+/* Style des cases */
+.crossword-square {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-alignment: center;
+    -fx-border-color: black;
+    -fx-border-width: 0.5px;
+}
+
+/* Style des cases noires */
+.black {
+    -fx-background-color: black;
+}
+
+/* Style pour les cases avec une proposition correcte */
+.correct {
+    -fx-background-color: lightgreen;
+}
+
+/* Style de la case courante */
+.crossword-square:focused {
+    -fx-border-color: blue;
+    -fx-border-width: 5px;
+}
+
+/* au survol d'une case */
+.crossword-square:hover {
+    -fx-cursor: hand;
+}
+
+/* au survol d'une case noire */
+.black:hover {
+    -fx-cursor: default;
+}
+
+.current-direction .list-cell:filled:selected {
+	-fx-background-color: red;
+    -fx-text-fill: white;
+}

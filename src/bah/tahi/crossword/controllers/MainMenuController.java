@@ -1,10 +1,12 @@
-package bah.tahi.crossword;
+package bah.tahi.crossword.controllers;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import bah.tahi.crossword.Database;
+import bah.tahi.crossword.Main;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,7 +63,7 @@ public class MainMenuController implements Initializable {
 	 */
 	private void play() {
 		try {
-			Pane view = (Pane) FXMLLoader.load(getClass().getResource("crosswordScene.fxml"));
+			Pane view = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/crosswordScene.fxml"));
 			Main.setView(view);
 		} catch (IOException e) {
 			e.printStackTrace();
