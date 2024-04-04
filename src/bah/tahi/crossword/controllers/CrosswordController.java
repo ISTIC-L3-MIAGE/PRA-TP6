@@ -20,17 +20,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 
+/**
+ * Controleur de la vue du plateau de jeu.
+ */
 public class CrosswordController implements Initializable {
 
 	/**
-	 * Instance du modèle de jeu
+	 * Instance du modèle de jeu.
 	 */
 	private static Crossword model;
-	private int BOARD_HEIGHT;
-	private int BOARD_WIDTH;
 
 	/**
-	 * Conteneur du plateau de jeu sur la vue
+	 * Taille du plateau.
+	 */
+	private int BOARD_HEIGHT, BOARD_WIDTH;
+
+	/**
+	 * Conteneur du plateau de jeu sur la vue.
 	 */
 	@FXML
 	private AnchorPane gridContainer;
@@ -51,11 +57,33 @@ public class CrosswordController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		Database db = new Database();
 
-		// Instanciation du modèle de jeu
-
+		// Chargement de la grille choisie par le joueur
 		model = Crossword.createPuzzle(db, Main.getPuzzleNumber());
 		BOARD_HEIGHT = model.getHeight();
 		BOARD_WIDTH = model.getWidth();
+
+		// Gestion des évènements en rapport avec la grille de jeu
+		model.directionProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue == Direction.VERTICAL) {
+				verticalIndexes.getStyleClass().add("current-direction");
+				horizontalIndexes.getStyleClass().remove("current-direction");
+			} else {
+				horizontalIndexes.getStyleClass().add("current-direction");
+				verticalIndexes.getStyleClass().remove("current-direction");
+			}
+		});
+
+		model.winProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				try {
+					Pane view = (Pane) FXMLLoader
+							.load(getClass().getResource("/bah/tahi/crossword/views/endGameScene.fxml"));
+					Main.setView(view);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 
 		// Initialistaion des indices
 		horizontalIndexes.setItems(model.getHorizontalClues());
@@ -81,28 +109,7 @@ public class CrosswordController implements Initializable {
 			}
 		});
 
-		model.directionProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue == Direction.VERTICAL) {
-				verticalIndexes.getStyleClass().add("current-direction");
-				horizontalIndexes.getStyleClass().remove("current-direction");
-			} else {
-				horizontalIndexes.getStyleClass().add("current-direction");
-				verticalIndexes.getStyleClass().remove("current-direction");
-			}
-		});
-
-		model.winProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				try {
-					Pane view = (Pane) FXMLLoader.load(getClass().getResource("endGameScene.fxml"));
-					Main.setView(view);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		// Initialisation de la grille et de son conteneur
+		// Initialisation de la grille et de son conteneur sur la vue
 		int i, j;
 
 		double gridContainerHeight = gridContainer.getPrefHeight();
@@ -127,6 +134,8 @@ public class CrosswordController implements Initializable {
 			for (j = 0; j < BOARD_WIDTH; j++) {
 				CrosswordSquare square = model.getCell(i, j);
 
+				// On rajoute des écouteurs pour changer l'élément sélectionné dans les
+				// ListViews
 				square.focusedProperty().addListener((observable, oldValue, newValue) -> {
 					if (newValue) {
 						Clue horizontal = square.getDefinition(true);

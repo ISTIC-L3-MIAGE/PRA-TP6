@@ -63,7 +63,7 @@ public class MainMenuController implements Initializable {
 	 */
 	private void play() {
 		try {
-			Pane view = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/crosswordScene.fxml"));
+			Pane view = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/views/crosswordScene.fxml"));
 			Main.setView(view);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -51,7 +51,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		try {
 			// Chargement de la vue du menu principal
-			Pane root = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
+			Pane root = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/views/mainMenuScene.fxml"));
 			Main.scene = new Scene(root);
 
 			// Détection de CTRL + W pour fermer la fenêtre

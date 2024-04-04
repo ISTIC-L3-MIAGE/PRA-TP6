@@ -32,7 +32,7 @@ public class EndGameController implements Initializable {
 	 */
 	public void replay() {
 		try {
-			Pane view = (Pane) FXMLLoader.load(getClass().getResource("mainMenuScene.fxml"));
+			Pane view = (Pane) FXMLLoader.load(getClass().getResource("/bah/tahi/crossword/views/mainMenuScene.fxml"));
 			Main.setView(view);
 		} catch (IOException e) {
 			e.printStackTrace();
